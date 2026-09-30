@@ -5,17 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Generador de exámenes · Movimiento Ondulatorio</title>
 <meta name="color-scheme" content="light dark">
-<script>
-/* Aplica el tema guardado (o el del sistema) antes de pintar, para evitar parpadeos */
-(function () {
-  var t = null;
-  try { t = window.localStorage.getItem("ondas_theme_v1"); } catch (e) {}
-  if (t !== "light" && t !== "dark") {
-    t = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
-  }
-  document.documentElement.setAttribute("data-theme", t);
-})();
-</script>
 <link rel="stylesheet" href="estilo.css?v=2">
 </head>
 <body>
@@ -55,7 +44,7 @@
       <button class="btn ghost hidden" id="resumeBtn" type="button">Continuar examen</button>
       <button class="btn ghost hidden" id="reviewBtn" type="button">Revisar examen anterior</button>
     </div>
-    <p class="hint" style="margin-top:22px">Ten a mano calculadora (en radianes) y papel. En las respuestas numéricas puedes usar punto o coma decimal.</p>
+    <p class="hint hint-top">Ten a mano calculadora (en radianes) y papel. En las respuestas numéricas puedes usar punto o coma decimal.</p>
   </section>
 
   <!-- PREGUNTAS -->
@@ -82,30 +71,6 @@
 
 </div>
 
-<!-- =====================================================================
-     BANCO DE PREGUNTAS  (edita aquí para ampliar)
-     ---------------------------------------------------------------------
-     Cómo añadir una pregunta: copia un objeto y agrégalo AL FINAL del array
-     BANK (no reordenes las existentes: el progreso guardado usa la posición).
-
-     Campos comunes
-       sec   : 0..4  (índice en SECTIONS)
-       type  : "mc" (opción múltiple) | "num" (numérica)
-       topic : tema corto; se lista en "Temas huecos" si se falla
-       q     : enunciado (HTML simple: <sub>, <sup>, <b>, <span class='formula'>)
-       exp   : explicación pedagógica (paso a paso + por qué fallan las otras).
-               En "mc" NO cites las opciones por letra: se barajan; cítalas por su contenido.
-
-     Solo "mc"
-       opts  : 4 textos; ans = índice (0..3) de la correcta DENTRO de opts.
-               El examen baraja el orden al mostrarlas, la lógica no se rompe.
-
-     Solo "num"
-       fields: [{ label, unit, ans, tol }]
-               tol = error relativo permitido (0.02 = 2 %). Opcional abs = error
-               absoluto mínimo permitido (útil si ans es cercano a 0).
-               Acepta coma o punto decimal y notación 2.5e-4.
-     ===================================================================== -->
 <script src="motor.js?v=2"></script>
 </body>
 </html>

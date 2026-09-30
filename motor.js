@@ -15,6 +15,30 @@ var SHEETS = [
   ["∂²y/∂x² = (1/v²) ∂²y/∂t² &nbsp;&nbsp; (μ/F) ∂²y/∂t² = ∂²y/∂x² &nbsp;&nbsp; v² = F/μ", "ΣF<sub>y</sub> = μΔx (∂²y/∂t²) &nbsp;&nbsp; Ángulos pequeños: sen θ ≈ tan θ ≈ ∂y/∂x"]
 ];
 
+/* =====================================================================
+     BANCO DE PREGUNTAS  (edita aquí para ampliar)
+     ---------------------------------------------------------------------
+     Cómo añadir una pregunta: copia un objeto y agrégalo AL FINAL del array
+     BANK (no reordenes las existentes: el progreso guardado usa la posición).
+
+     Campos comunes
+       sec   : 0..4  (índice en SECTIONS)
+       type  : "mc" (opción múltiple) | "num" (numérica)
+       topic : tema corto; se lista en "Temas huecos" si se falla
+       q     : enunciado (HTML simple: <sub>, <sup>, <b>, <span class='formula'>)
+       exp   : explicación pedagógica (paso a paso + por qué fallan las otras).
+               En "mc" NO cites las opciones por letra: se barajan; cítalas por su contenido.
+
+     Solo "mc"
+       opts  : 4 textos; ans = índice (0..3) de la correcta DENTRO de opts.
+               El examen baraja el orden al mostrarlas, la lógica no se rompe.
+
+     Solo "num"
+       fields: [{ label, unit, ans, tol }]
+               tol = error relativo permitido (0.02 = 2 %). Opcional abs = error
+               absoluto mínimo permitido (útil si ans es cercano a 0).
+               Acepta coma o punto decimal y notación 2.5e-4.
+     ===================================================================== */
 var BANK = [
 
 /* ===================== SECCIÓN 1 · Conceptos fundamentales ===================== */
@@ -1283,13 +1307,17 @@ var BANK = [
   if (!$("themeBtn")) {
     var bar = document.createElement("div");
     bar.className = "topbar";
-    bar.style.cssText = "display:flex;justify-content:flex-end";
     bar.innerHTML = "<button class='btn ghost small' id='themeBtn' type='button' aria-pressed='false'>Modo oscuro</button>";
     var wrap = document.querySelector(".wrap");
     wrap.insertBefore(bar, wrap.firstChild);
   }
   $("themeBtn").addEventListener("click", toggleTheme);
-  applyTheme(document.documentElement.getAttribute("data-theme") || "light");
+  var saved = null;
+  try { saved = window.localStorage.getItem(K_THEME); } catch (e) { /* sin acceso */ }
+  if (saved !== "light" && saved !== "dark") {
+    saved = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+  }
+  applyTheme(saved);
 
   showCover();
 })();

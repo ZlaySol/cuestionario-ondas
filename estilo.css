@@ -178,6 +178,7 @@
   .field input:focus { border-color: var(--primary); }
   .field .unit { color: var(--muted); }
   .hint { color: var(--muted); font-size: .9rem; margin-top: 14px; }
+  .hint-top { margin-top: 22px; }
 
   .sheet { margin-top: 16px; border: 1px dashed var(--primary); border-radius: 12px; background: var(--sheet-bg); }
   .sheet summary { cursor: pointer; padding: 10px 14px; font-weight: 600; color: var(--primary-dark); }
