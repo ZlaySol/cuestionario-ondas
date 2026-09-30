@@ -1,9 +1,3 @@
-/* =====================================================================
-   TEMAS
-   :root                      -> modo claro (por defecto)
-   :root[data-theme="dark"]   -> modo oscuro
-   Para cambiar colores, edita solo las variables de estos dos bloques.
-   ===================================================================== */
 :root {
     color-scheme: light;
     --bg: #eaf1f5;
@@ -22,7 +16,6 @@
     --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
     --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
-    /* variables extra (antes estaban fijas en las reglas) */
     --btn-ink: #ffffff;
     --btn-disabled: #b9c9d0;
     --ghost-disabled-ink: #8aa0a9;
