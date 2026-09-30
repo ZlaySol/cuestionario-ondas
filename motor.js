@@ -1,0 +1,1264 @@
+var SECTIONS = [
+  "Conceptos fundamentales",
+  "Ondas viajeras y función de onda",
+  "Velocidad en cuerdas y reflexión/transmisión",
+  "Superposición, interferencia y energía",
+  "Ecuación de onda lineal"
+];
+
+/* Fórmulas del temario por sección (se muestran en modo Práctica) */
+var SHEETS = [
+  ["v = λ f &nbsp;&nbsp; T = 1/f &nbsp;&nbsp; ω = 2π/T = 2π f &nbsp;&nbsp; k = 2π/λ", "v = x/t (rapidez constante en un medio dado)"],
+  ["y = A sen(kx − ωt) &nbsp;&nbsp; v = λ f = ω/k &nbsp;&nbsp; k = 2π/λ", "v<sub>y</sub> = −ωA cos(kx − ωt) &nbsp;&nbsp; v<sub>y,máx</sub> = ωA &nbsp;&nbsp; a<sub>y,máx</sub> = ω²A", "Pulso: y = f(x − vt) viaja hacia +x; y = f(x + vt) viaja hacia −x"],
+  ["v = √(F/μ) &nbsp;&nbsp; μ = m/L", "Extremo fijo: reflejado invertido. Extremo libre: reflejado sin invertir.", "Liviana → pesada: reflejado invertido, transmitido no. Pesada → liviana: ninguno se invierte."],
+  ["P = ½ μ ω² A² v &nbsp;&nbsp; E = ½ (μΔx) ω² A²", "Superposición: y = y<sub>1</sub> + y<sub>2</sub> (suma algebraica)", "En fase: A<sub>R</sub> = A<sub>1</sub> + A<sub>2</sub> &nbsp;&nbsp; En oposición de fase: A<sub>R</sub> = |A<sub>1</sub> − A<sub>2</sub>|"],
+  ["∂²y/∂x² = (1/v²) ∂²y/∂t² &nbsp;&nbsp; (μ/F) ∂²y/∂t² = ∂²y/∂x² &nbsp;&nbsp; v² = F/μ", "ΣF<sub>y</sub> = μΔx (∂²y/∂t²) &nbsp;&nbsp; Ángulos pequeños: sen θ ≈ tan θ ≈ ∂y/∂x"]
+];
+
+var BANK = [
+
+/* ===================== SECCIÓN 1 · Conceptos fundamentales ===================== */
+
+{ sec: 0, type: "mc", topic: "ondas longitudinales: movimiento de las partículas",
+  q: "Una onda sonora se propaga en el aire hacia la derecha. Sobre las moléculas del aire, ¿cuál afirmación es correcta?",
+  opts: [
+    "Oscilan paralelas a la dirección de propagación y no se desplazan de forma neta con la onda.",
+    "Oscilan perpendicularmente a la propagación y no se desplazan de forma neta con la onda.",
+    "Viajan junto con la onda, transportando materia y energía hacia la derecha.",
+    "Oscilan paralelas a la propagación, pero avanzan con la onda a la velocidad del sonido."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> El sonido es una onda longitudinal: las partículas vibran en la misma dirección en que viaja la onda, alrededor de su posición de equilibrio. La onda transporta energía, no materia neta.<br><b>Por qué las otras no.</b> La que dice «perpendicularmente» describe una onda transversal. La que dice que las moléculas viajan con la onda confunde la propagación de la perturbación con el transporte de materia. La última acierta en la dirección, pero las moléculas no avanzan con la onda: solo oscilan." },
+
+{ sec: 0, type: "mc", topic: "la rapidez depende del medio; v = λf",
+  q: "Una onda senoidal de frecuencia f viaja por una cuerda estirada. Se detiene la cuerda y se genera una segunda onda con la misma amplitud y frecuencia 2f en la misma cuerda (misma tensión). Comparada con la primera, la segunda onda tiene:",
+  opts: [
+    "La misma rapidez y la mitad de longitud de onda.",
+    "El doble de rapidez y la misma longitud de onda.",
+    "El doble de rapidez y la mitad de longitud de onda.",
+    "La misma rapidez y el doble de longitud de onda."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> La rapidez en una cuerda depende solo del medio (v = √(F/μ)); la cuerda no cambió, así que v es la misma. Con v = λf, si f se duplica, λ se reduce a la mitad.<br><b>Por qué las otras no.</b> Las opciones que dicen «el doble de rapidez» creen que la frecuencia acelera la onda, pero v no depende de f. La que dice «el doble de longitud de onda» invierte la proporción: v constante implica λ ∝ 1/f." },
+
+{ sec: 0, type: "num", topic: "partes de una onda: λ, T y v",
+  q: "Una cresta pasa por un punto fijo de una cuerda cada 0.25 s. La distancia entre una cresta y el valle contiguo es 0.60 m. ¿Cuál es la rapidez de la onda?",
+  fields: [{ label: "v =", unit: "m/s", ans: 4.8, tol: 0.02 }],
+  exp: "<b>Paso 1.</b> De cresta a valle contiguo hay media longitud de onda: λ/2 = 0.60 m, entonces λ = 1.20 m.<br><b>Paso 2.</b> Que una cresta pase cada 0.25 s significa T = 0.25 s.<br><b>Paso 3.</b> v = λ/T = 1.20/0.25 = 4.8 m/s.<br>Error típico: usar 0.60 m como λ y obtener 2.4 m/s." },
+
+{ sec: 0, type: "mc", topic: "ondas combinadas (transversal + longitudinal)",
+  q: "Un corcho flota en la superficie del agua y pasa una ola. ¿Cómo describe el movimiento del corcho?",
+  opts: [
+    "Una trayectoria aproximadamente circular o elíptica: la ola combina movimiento transversal y longitudinal.",
+    "Sube y baja en línea recta vertical, porque la ola es puramente transversal.",
+    "Avanza junto con la cresta a la velocidad de la ola.",
+    "Oscila solo horizontalmente, porque el agua es un medio longitudinal."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> Las olas en la superficie del agua no son puramente transversales ni longitudinales: cada partícula describe un recorrido circular/elíptico. Por eso el corcho sube, baja y se mueve un poco adelante y atrás, pero no viaja con la ola.<br><b>Por qué las otras no.</b> «Solo vertical» y «solo horizontal» olvidan que ambos movimientos ocurren a la vez. «Avanza con la cresta» confunde la velocidad de la onda con la de las partículas del medio." },
+
+{ sec: 0, type: "num", topic: "periodo, λ y rapidez de una ola del mar",
+  q: "Una boya en el mar sube y baja completando 12 oscilaciones en 60 s. Dos crestas consecutivas de las olas que la mueven están separadas 15 m. Calcula el periodo T de las olas y su rapidez v de avance.",
+  fields: [
+    { label: "T =", unit: "s", ans: 60 / 12, tol: 0.02 },
+    { label: "v =", unit: "m/s", ans: 15 / (60 / 12), tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> f = 12/60 = 0.20 Hz, así que T = 1/f = 5.0 s.<br><b>Paso 2.</b> La distancia entre crestas consecutivas es λ = 15 m.<br><b>Paso 3.</b> v = λ/T = 15/5.0 = 3.0 m/s (o v = λf = 15·0.20).<br>Error típico: dividir 60 entre 12 y llamar «frecuencia» al 5." },
+
+{ sec: 0, type: "num", topic: "sonido en el aire: λ y T desde la frecuencia",
+  q: "Un afinador electrónico detecta la nota La de un violín: 440 Hz. Considera que el sonido viaja en el aire a 343 m/s. Calcula la longitud de onda λ del sonido y el periodo T de la vibración (en milisegundos).",
+  fields: [
+    { label: "λ =", unit: "m", ans: 343 / 440, tol: 0.02 },
+    { label: "T =", unit: "ms", ans: 1000 / 440, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> Se despeja λ de v = λf: λ = v/f = 343/440 ≈ 0.78 m.<br><b>Paso 2.</b> T = 1/f = 1/440 ≈ 0.00227 s = 2.27 ms.<br>Error típico: olvidar convertir segundos a milisegundos (×1000)." },
+
+{ sec: 0, type: "mc", topic: "ordenar rapideces con v = λf y T = 1/f",
+  q: "Tres ondas viajan por medios distintos. Ordénalas de mayor a menor según su rapidez de propagación:<span class='formula'>A) λ = 2.0 m, f = 3.0 Hz<br>B) λ = 0.50 m, f = 10 Hz<br>C) λ = 8.0 m, T = 2.0 s</span>",
+  opts: ["A > B > C", "B > A > C", "C > A > B", "C > B > A"], ans: 0,
+  exp: "<b>Razonamiento.</b> Se calcula v = λf para cada una: A: 2.0·3.0 = 6.0 m/s; B: 0.50·10 = 5.0 m/s; C: f = 1/T = 0.50 Hz, luego v = 8.0·0.50 = 4.0 m/s. Orden: A > B > C.<br><b>Por qué las otras no.</b> Ordenar por frecuencia (B primero) o por longitud de onda (C primero) es olvidar que la rapidez depende del producto de las dos." },
+
+{ sec: 0, type: "mc", topic: "clasificar ondas sísmicas P (longitudinal) y S (transversal)",
+  q: "Durante un sismo, una estación registra dos ondas que viajan horizontalmente hacia el este. En la onda 1 el suelo sube y baja. En la onda 2 el suelo se comprime y se estira en la dirección este-oeste. Una de ellas es la onda P (longitudinal) y la otra la onda S (transversal). ¿Cuál es cuál?",
+  opts: [
+    "La onda 1 es S y la onda 2 es P.",
+    "La onda 1 es P y la onda 2 es S.",
+    "Ambas son P, porque ambas viajan hacia el este.",
+    "Ambas son S, porque ambas hacen mover el suelo."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> Onda 1: el movimiento (vertical) es perpendicular a la propagación (este), por tanto transversal: S. Onda 2: el movimiento (este-oeste) es paralelo a la propagación, por tanto longitudinal: P.<br><b>Por qué las otras no.</b> La dirección de propagación no define el tipo de onda; lo define la relación entre el movimiento de las partículas y esa dirección. La opción invertida intercambia los dos criterios." },
+
+{ sec: 0, type: "num", topic: "sismos: tiempos de llegada de dos ondas con v = x/t",
+  q: "Una onda P viaja a 8.0 km/s y una onda S a 4.5 km/s desde el foco de un sismo, por la misma trayectoria recta. Un sismógrafo registra la llegada de la onda S 20 s después de la onda P. ¿A qué distancia del foco está el sismógrafo?",
+  fields: [{ label: "d =", unit: "km", ans: 20 / (1 / 4.5 - 1 / 8.0), tol: 0.02 }],
+  exp: "<b>Paso 1.</b> Los tiempos de viaje son t<sub>P</sub> = d/8.0 y t<sub>S</sub> = d/4.5 (de v = x/t).<br><b>Paso 2.</b> La diferencia es 20 s: d/4.5 − d/8.0 = 20.<br><b>Paso 3.</b> d(0.2222 − 0.1250) = 20, luego d = 20/0.09722 ≈ 206 km.<br>Error típico: multiplicar 20 s por la diferencia de rapideces (3.5 km/s), que da 70 km." },
+
+{ sec: 0, type: "num", topic: "eco: ida y vuelta con v = x/t",
+  q: "Un excursionista grita frente a un acantilado y escucha el eco 2.4 s después. Si el sonido viaja a 340 m/s, ¿a qué distancia está el acantilado?",
+  fields: [{ label: "d =", unit: "m", ans: 340 * 2.4 / 2, tol: 0.02 }],
+  exp: "<b>Paso 1.</b> El sonido va al acantilado y regresa: recorre 2d en 2.4 s.<br><b>Paso 2.</b> 2d = vt = 340·2.4 = 816 m.<br><b>Paso 3.</b> d = 816/2 = 408 m.<br>Error típico: responder 816 m (olvidar que el eco es ida y vuelta)." },
+
+{ sec: 0, type: "mc", topic: "qué pasa si cambia el medio: f fija, λ cambia",
+  q: "Un altavoz emite un tono de 500 Hz en el aire. En un día caluroso el aire se calienta y el sonido viaja más rápido que antes. Con el altavoz sin modificar, ¿qué ocurre con la frecuencia f y la longitud de onda λ del tono?",
+  opts: [
+    "f no cambia y λ aumenta.",
+    "f aumenta y λ no cambia.",
+    "f no cambia y λ disminuye.",
+    "Tanto f como λ aumentan."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> El altavoz sigue emitiendo 500 oscilaciones por segundo: la frecuencia la fija la fuente. La rapidez depende del medio (aquí, de la temperatura) y aumentó. Con λ = v/f y f constante, λ aumenta.<br><b>Por qué las otras no.</b> Una f mayor implicaría que la fuente vibra más rápido, lo cual no ocurrió. «λ disminuye» contradice v = λf con v mayor y f igual." },
+
+{ sec: 0, type: "num", topic: "cuerda de saltar: v = x/t y λ = v/f",
+  q: "Dos niños agitan una cuerda de saltar muy larga y producen una onda que recorre 6.0 m en 2.0 s. Un observador cuenta que pasan 4 crestas por segundo por un punto fijo de la cuerda. ¿Cuál es la rapidez de la onda y su longitud de onda?",
+  fields: [
+    { label: "v =", unit: "m/s", ans: 3, tol: 0.02 },
+    { label: "λ =", unit: "m", ans: 0.75, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> v = x/t = 6.0/2.0 = 3.0 m/s.<br><b>Paso 2.</b> Cuatro crestas por segundo significa f = 4.0 Hz.<br><b>Paso 3.</b> Se despeja λ = v/f = 3.0/4.0 = 0.75 m." },
+
+{ sec: 0, type: "mc", topic: "leer gráficas descritas: λ en x y T en t",
+  q: "Dos gráficas describen la misma onda en una cuerda. Gráfica 1: y contra x en un instante fijo; dos crestas consecutivas están separadas 3.0 m. Gráfica 2: y contra t en un punto fijo; dos crestas consecutivas están separadas 0.50 s en el eje del tiempo. ¿Cuál es la rapidez de la onda?",
+  opts: ["6.0 m/s", "1.5 m/s", "0.17 m/s", "3.5 m/s"], ans: 0,
+  exp: "<b>Razonamiento.</b> La gráfica de y contra x en un instante fijo da λ = 3.0 m; la de y contra t en un punto fijo da T = 0.50 s. Entonces v = λ/T = 3.0/0.50 = 6.0 m/s.<br><b>Por qué las otras no.</b> 1.5 m/s resulta de multiplicar λ·T; 0.17 m/s de dividir T/λ; 3.5 m/s de sumar. Ninguna operación tiene unidades de m/s salvo la división λ/T." },
+
+{ sec: 0, type: "mc", topic: "ondas mecánicas vs. electromagnéticas (necesidad de medio)",
+  q: "Un astronauta en órbita ve por su ventana un destello brillante causado por la explosión de un satélite a 2 km de distancia, pero no percibe ningún sonido. ¿Cuál es la explicación correcta?",
+  opts: [
+    "La luz no necesita un medio material para propagarse, pero el sonido (onda mecánica) sí, y entre ambos no hay medio.",
+    "La luz es una onda mecánica más veloz que el sonido, por eso llega antes y el sonido nunca alcanza a llegar.",
+    "El sonido sí llega, pero su frecuencia es demasiado alta para oírse en el espacio.",
+    "El sonido viaja más rápido que la luz en el espacio, por eso ya pasó cuando el astronauta miró."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> Las ondas mecánicas (sonido) requieren un medio que pueda perturbarse y conexión física entre sus partes; las electromagnéticas (luz) se propagan en el vacío. Entre el satélite y la nave no hay medio, así que el sonido no viaja.<br><b>Por qué las otras no.</b> La luz no es una onda mecánica. El problema no es la frecuencia ni el orden de llegada: sin medio simplemente no hay propagación de sonido." },
+
+{ sec: 0, type: "mc", topic: "transversal vs. longitudinal en una situación cotidiana",
+  q: "En un estadio los aficionados hacen «la ola»: cada persona se pone de pie y se sienta cuando le toca, y el «pulso» de personas de pie recorre las gradas de izquierda a derecha. ¿Qué afirmación es correcta?",
+  opts: [
+    "Es transversal: las personas se mueven verticalmente (perpendicular a la propagación) y no viajan con la ola; lo que se propaga es la perturbación.",
+    "Es longitudinal: la ola avanza horizontalmente, así que las personas se desplazan horizontalmente con ella.",
+    "Es transversal, pero las personas sí se desplazan de izquierda a derecha junto con la ola.",
+    "Es longitudinal, porque cada persona se mueve en la misma dirección en que se propaga la ola."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> El movimiento de cada persona es vertical y la perturbación se propaga horizontalmente: perpendiculares, por tanto onda transversal. Como en toda onda mecánica, el medio (las personas) queda en su lugar; se transmite la perturbación.<br><b>Por qué las otras no.</b> Las que dicen «longitudinal» ignoran que el movimiento es vertical. Las que hacen que las personas viajen con la ola confunden la velocidad de la perturbación con el desplazamiento del medio." },
+
+{ sec: 0, type: "mc", topic: "ordenar periodos con f, T y ω",
+  q: "Ordena los siguientes movimientos oscilatorios de mayor a menor periodo T:<span class='formula'>A) f = 50 Hz &nbsp;&nbsp; B) T = 5.0 ms<br>C) ω = 400 rad/s &nbsp;&nbsp; D) f = 0.10 kHz</span>",
+  opts: ["A > C > D > B", "A > D > C > B", "B > D > C > A", "C > A > D > B"], ans: 0,
+  exp: "<b>Razonamiento.</b> Se pasa todo a T: A: 1/50 = 20 ms; B: 5.0 ms; C: T = 2π/ω = 2π/400 ≈ 15.7 ms; D: f = 100 Hz, T = 10 ms. Orden de mayor a menor: A (20) > C (15.7) > D (10) > B (5).<br><b>Por qué las otras no.</b> Confundir ω con f (tratar 400 como si fueran hercios) coloca a C en el lugar equivocado; y a mayor frecuencia corresponde menor periodo, no mayor." },
+
+{ sec: 0, type: "num", topic: "proporcionalidad: v constante, λ triplica",
+  q: "Un vibrador genera ondas en un medio. Sin cambiar de medio (v constante) se ajusta el vibrador hasta que la longitud de onda se triplica. ¿Por qué factor se multiplican la frecuencia f y el periodo T?",
+  fields: [
+    { label: "f₂/f₁ =", unit: "", ans: 1 / 3, tol: 0.02 },
+    { label: "T₂/T₁ =", unit: "", ans: 3, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> Con v constante, v = λf implica que f = v/λ es inversamente proporcional a λ: f₂/f₁ = 1/3 ≈ 0.333.<br><b>Paso 2.</b> Como T = 1/f, T₂/T₁ = 3.<br>Error típico: responder 3 para f (pensar que crece con λ)." },
+
+{ sec: 0, type: "mc", topic: "clasificar ondas: longitudinales vs. transversales",
+  q: "Clasifica cada fenómeno como onda longitudinal o transversal:<span class='formula'>(i) el sonido de una guitarra viajando por el aire<br>(ii) una sacudida vertical que viaja por una cuerda tensa horizontal<br>(iii) un resorte largo al que se le empuja y jala el extremo a lo largo de su eje</span>",
+  opts: [
+    "(i) longitudinal, (ii) transversal, (iii) longitudinal",
+    "(i) transversal, (ii) transversal, (iii) longitudinal",
+    "(i) longitudinal, (ii) longitudinal, (iii) transversal",
+    "(i) transversal, (ii) longitudinal, (iii) transversal"
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> (i) Las moléculas del aire oscilan paralelas a la propagación: longitudinal. (ii) La cuerda se mueve verticalmente y la perturbación avanza horizontalmente: transversal. (iii) Las espiras oscilan a lo largo del eje, paralelas a la propagación: longitudinal.<br><b>Por qué las otras no.</b> Cada alternativa cambia al menos una clasificación; se descartan comparando la dirección del movimiento de las partículas con la de propagación." },
+
+{ sec: 0, type: "num", topic: "distancia recorrida por una cresta y número de oscilaciones",
+  q: "En un estanque se producen ondas de longitud de onda 1.5 m y periodo 0.50 s. En 3.0 s, ¿qué distancia avanza una cresta y cuántas oscilaciones completas hace un corcho flotando en el estanque?",
+  fields: [
+    { label: "d =", unit: "m", ans: (1.5 / 0.5) * 3, tol: 0.02 },
+    { label: "N =", unit: "oscilaciones", ans: 3 / 0.5, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> v = λ/T = 1.5/0.50 = 3.0 m/s, así que en 3.0 s la cresta avanza d = vt = 9.0 m (equivale a 6 longitudes de onda).<br><b>Paso 2.</b> El corcho completa una oscilación cada T: N = 3.0/0.50 = 6.<br>Idea clave: en un periodo la onda avanza una longitud de onda y cada partícula completa un ciclo." },
+
+{ sec: 0, type: "mc", topic: "amplitud no altera v, f ni λ",
+  q: "En un concierto, el ingeniero de sonido sube el volumen sin cambiar la nota (el tono) que suena. Subir el volumen aumenta la amplitud de la onda sonora en el mismo aire. ¿Qué ocurre con la rapidez, la frecuencia y la longitud de onda del sonido?",
+  opts: [
+    "Ninguna de las tres cambia; solo cambia la amplitud.",
+    "La rapidez aumenta porque la onda lleva más energía; f y λ no cambian.",
+    "La longitud de onda aumenta, y la frecuencia y la rapidez no cambian.",
+    "La frecuencia aumenta, y la rapidez y la longitud de onda no cambian."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> La rapidez depende únicamente de las propiedades del medio (el aire no cambió). La frecuencia la fija la fuente y el tono es el mismo; entonces λ = v/f tampoco cambia. Solo cambia la amplitud.<br><b>Por qué las otras no.</b> Asociar más energía con más rapidez es un error común: la energía depende de la amplitud, pero no modifica v. Si λ o f cambiaran, la nota sería distinta." },
+
+
+/* ===================== SECCIÓN 2 · Ondas viajeras y función de onda ===================== */
+
+{ sec: 1, type: "mc", topic: "v = ω/k y comparación de funciones de onda",
+  q: "Se tienen cuatro ondas (x en m, t en s):<span class='formula'>a) y = 2 sen(3x − 15t) &nbsp;&nbsp; b) y = 4 sen(3x − 25t)<br>c) y = 6 sen(5x + 15t) &nbsp;&nbsp; d) y = 8 sen(2x + 10t)</span>Ordénalas de mayor a menor según la magnitud de su rapidez de propagación.",
+  opts: ["b > a = d > c", "b > a > d > c", "a = d > b > c", "c > a = d > b"], ans: 0,
+  exp: "<b>Razonamiento.</b> Con y = A sen(kx ± ωt), la rapidez es v = ω/k (el signo solo da la dirección). a: 15/3 = 5 m/s; b: 25/3 ≈ 8.33 m/s; c: 15/5 = 3 m/s; d: 10/2 = 5 m/s. Orden: b > a = d > c.<br><b>Por qué las otras no.</b> Ordenar por amplitud (6, 8, 4, 2) o por ω o por k por separado no da la rapidez; hay que dividir. La opción con a > d supone que la amplitud influye en v, y no lo hace." },
+
+{ sec: 1, type: "num", topic: "cálculo de k, ω y evaluación de y(x,t)",
+  q: "Una onda senoidal de amplitud 0.20 m viaja hacia +x con v = 4.0 m/s. Cada partícula del medio completa 50 oscilaciones en 10 s. Con <b>y = A sen(kx − ωt)</b> calcula el número de onda k y la elongación y<sub>1</sub> de una partícula ubicada en x = 1.3λ en el instante t = 1.2T (calculadora en radianes).",
+  fields: [
+    { label: "k =", unit: "rad/m", ans: 2.5 * Math.PI, tol: 0.02 },
+    { label: "y<sub>1</sub> =", unit: "m", ans: 0.2 * Math.sin(0.2 * Math.PI), tol: 0.05 }
+  ],
+  exp: "<b>Paso 1.</b> f = 50/10 = 5 Hz, T = 0.2 s, ω = 2πf = 10π rad/s.<br><b>Paso 2.</b> λ = v/f = 0.8 m y k = 2π/λ = 2.5π ≈ 7.85 rad/m.<br><b>Paso 3.</b> La fase es kx − ωt = 2π(1.3) − 2π(1.2) = 0.2π rad, así que y<sub>1</sub> = 0.20·sen(0.2π) = 0.20·0.588 ≈ 0.118 m." },
+
+{ sec: 1, type: "mc", topic: "pulsos f(x ± vt): amplitud y dirección",
+  q: "Un pulso viaja por una cuerda y su forma es <span class='formula'>y(x,t) = 8 / [ (x + 2t)² + 4 ] &nbsp; (SI)</span>¿Cuál descripción es correcta?",
+  opts: [
+    "Amplitud 2 m; en t = 3 s su máximo está en x = −6 m (viaja hacia −x).",
+    "Amplitud 2 m; en t = 3 s su máximo está en x = +6 m (viaja hacia +x).",
+    "Amplitud 8 m; en t = 3 s su máximo está en x = −6 m.",
+    "Amplitud 4 m; en t = 3 s su máximo está en x = −12 m."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> El máximo ocurre cuando el denominador es mínimo: x + 2t = 0, y entonces y<sub>máx</sub> = 8/4 = 2 m. Como la función depende de (x + vt) con v = 2 m/s, el pulso viaja hacia −x. En t = 3 s: x = −2(3) = −6 m.<br><b>Por qué las otras no.</b> Decir «hacia +x» ignora el signo + en (x + 2t). Decir amplitud 8 m olvida el 4 del denominador. La última confunde 2t con 4t." },
+
+{ sec: 1, type: "num", topic: "identificar k, ω, v y dirección",
+  q: "Una onda en una cuerda está dada por <span class='formula'>y = 0.03 sen(5x + 30t) &nbsp; (SI)</span>Halla su velocidad de propagación con signo (positivo si va hacia +x) y su longitud de onda.",
+  fields: [
+    { label: "v =", unit: "m/s (con signo)", ans: -6, tol: 0.01 },
+    { label: "λ =", unit: "m", ans: 2 * Math.PI / 5, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> Aquí k = 5 rad/m y ω = 30 rad/s, entonces |v| = ω/k = 6 m/s.<br><b>Paso 2.</b> Como kx y ωt tienen el mismo signo (x + vt), la onda viaja hacia −x, por lo que v = −6 m/s.<br><b>Paso 3.</b> λ = 2π/k = 2π/5 ≈ 1.26 m." },
+
+{ sec: 1, type: "num", topic: "pulso 2/[(x − vt)² + 1]: instante y valor de y",
+  q: "Un pulso se propaga por una cuerda con función de onda<span class='formula'>y(x, t) = 2 / [ (x − 3.0t)² + 1 ]</span>donde x y y están en cm y t en s. (a) ¿En qué instante el máximo del pulso llega a x = 12 cm? (b) ¿Cuánto vale y en x = 5.0 cm cuando t = 1.0 s?",
+  fields: [
+    { label: "(a) t =", unit: "s", ans: 4, tol: 0.02 },
+    { label: "(b) y =", unit: "cm", ans: 2 / (Math.pow(5 - 3, 2) + 1), tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> El máximo ocurre cuando x − 3.0t = 0, es decir x = 3.0t. Con x = 12 cm: t = 12/3.0 = 4.0 s (el pulso avanza a 3.0 cm/s hacia +x).<br><b>Paso 2.</b> Para (b): x − 3.0t = 5.0 − 3.0 = 2.0 cm, entonces y = 2/(2.0² + 1) = 2/5 = 0.40 cm.<br>Error típico: sustituir mal t y calcular (5 − 3.0)² como 5 − 9." },
+
+{ sec: 1, type: "num", topic: "leer λ y v de y = A sen(kx − ωt) con π",
+  q: "Una onda está dada por <span class='formula'>y = 0.05 sen(4πx − 6πt) &nbsp; (SI)</span>Identifica los parámetros y calcula su longitud de onda y su rapidez de propagación.",
+  fields: [
+    { label: "λ =", unit: "m", ans: 0.5, tol: 0.02 },
+    { label: "v =", unit: "m/s", ans: 1.5, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> Comparando con A sen(kx − ωt): k = 4π rad/m y ω = 6π rad/s.<br><b>Paso 2.</b> λ = 2π/k = 2π/4π = 0.50 m.<br><b>Paso 3.</b> v = ω/k = 6π/4π = 1.5 m/s (f = 3 Hz; comprobación: λf = 0.50·3 = 1.5 m/s).<br>Error típico: dar λ = 4π o v = 6π sin dividir." },
+
+{ sec: 1, type: "mc", topic: "escribir la función de onda a partir de A, λ y f",
+  q: "Una onda senoidal viaja hacia +x con A = 0.10 m, λ = 0.50 m y f = 6.0 Hz. ¿Cuál es su función de onda (SI, x en m, t en s)?",
+  opts: [
+    "y = 0.10 sen(12.6x − 37.7t)",
+    "y = 0.10 sen(12.6x + 37.7t)",
+    "y = 0.10 sen(2.0x − 6.0t)",
+    "y = 0.10 sen(12.6x − 6.0t)"
+  ], ans: 0,
+  exp: "<b>Paso 1.</b> k = 2π/λ = 2π/0.50 ≈ 12.6 rad/m.<br><b>Paso 2.</b> ω = 2πf = 2π(6.0) ≈ 37.7 rad/s.<br><b>Paso 3.</b> Hacia +x el signo es negativo: kx − ωt.<br><b>Por qué las otras no.</b> Con «+37.7t» la onda iría hacia −x. Con 2.0 y 6.0 se usaron 1/λ y f en lugar de k y ω. Con «−6.0t» se usó f en vez de ω (lo que daría v = 6.0/12.6 ≈ 0.48 m/s, en vez de λf = 3.0 m/s)." },
+
+{ sec: 1, type: "mc", topic: "qué pasa si se duplica la frecuencia en el mismo medio",
+  q: "Una fuente produce en una cuerda la onda y = A sen(kx − ωt). Sin cambiar la cuerda ni su tensión, se duplica la frecuencia de la fuente. ¿Cuál es la nueva función de onda?",
+  opts: [
+    "y = A sen(2kx − 2ωt)",
+    "y = A sen(kx − 2ωt)",
+    "y = A sen(2kx − ωt)",
+    "y = 2A sen(kx − 2ωt)"
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> La rapidez v = ω/k depende solo del medio y no cambió. Si ω' = 2ω, entonces k' = ω'/v = 2k. La amplitud no depende de la frecuencia.<br><b>Por qué las otras no.</b> «kx − 2ωt» dejaría k igual y duplicaría v, lo cual no puede pasar sin cambiar la cuerda. «2kx − ωt» reduciría v a la mitad. «2A» supone que la amplitud crece con la frecuencia." },
+
+{ sec: 1, type: "mc", topic: "comparar dos ondas dadas sus ecuaciones",
+  q: "Dos ondas viajan por medios distintos (SI):<span class='formula'>Onda 1: y = 3 sen(2x − 8t) &nbsp;&nbsp; Onda 2: y = 3 sen(4x − 8t)</span>¿Cuál comparación es correcta?",
+  opts: [
+    "La onda 1 es dos veces más rápida y tiene el doble de longitud de onda que la onda 2.",
+    "Las dos tienen la misma rapidez porque tienen la misma amplitud y la misma ω.",
+    "La onda 2 es dos veces más rápida porque su k es mayor.",
+    "La onda 1 es dos veces más rápida pero tiene la mitad de longitud de onda."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> v<sub>1</sub> = ω/k = 8/2 = 4 m/s y v<sub>2</sub> = 8/4 = 2 m/s. Además λ = 2π/k: λ<sub>1</sub> = π m y λ<sub>2</sub> = π/2 m, así que λ<sub>1</sub> = 2λ<sub>2</sub>.<br><b>Por qué las otras no.</b> Igual ω y A no implican igual v (hay que dividir por k). Un k mayor da menor v cuando ω es fija. Y λ e k son inversos: a menor k, mayor λ." },
+
+{ sec: 1, type: "num", topic: "velocidad y aceleración máximas de una partícula",
+  q: "Una onda en una cuerda está dada por <span class='formula'>y = 0.040 sen(10x − 50t) &nbsp; (SI)</span>Calcula la rapidez transversal máxima y la aceleración transversal máxima de un pequeño trozo de la cuerda.",
+  fields: [
+    { label: "v<sub>y,máx</sub> =", unit: "m/s", ans: 50 * 0.04, tol: 0.02 },
+    { label: "a<sub>y,máx</sub> =", unit: "m/s²", ans: 2500 * 0.04, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> Aquí A = 0.040 m, k = 10 rad/m y ω = 50 rad/s.<br><b>Paso 2.</b> v<sub>y,máx</sub> = ωA = 50·0.040 = 2.0 m/s.<br><b>Paso 3.</b> a<sub>y,máx</sub> = ω²A = 2500·0.040 = 100 m/s².<br>Ojo: la rapidez de propagación de la onda es otra cosa: v = ω/k = 5 m/s." },
+
+{ sec: 1, type: "mc", topic: "velocidad y aceleración de un punto en la cresta",
+  q: "Una onda senoidal recorre una cuerda. En un instante dado, un punto P de la cuerda está exactamente en una cresta (y = +A). ¿Cuál afirmación sobre P es correcta en ese instante?",
+  opts: [
+    "Su velocidad vertical es cero y su aceleración vertical tiene magnitud máxima ω²A, dirigida hacia abajo.",
+    "Su velocidad vertical es máxima (ωA) y su aceleración es cero.",
+    "Su velocidad vertical y su aceleración vertical son ambas cero.",
+    "Su velocidad vertical es máxima (ωA) y su aceleración también es máxima."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> De y = A sen(kx − ωt): v<sub>y</sub> = −ωA cos(kx − ωt) y a<sub>y</sub> = −ω²A sen(kx − ωt) = −ω²y. En una cresta sen = 1, por lo que cos = 0: v<sub>y</sub> = 0 y a<sub>y</sub> = −ω²A (hacia abajo).<br><b>Por qué las otras no.</b> La velocidad es máxima cuando el punto pasa por el equilibrio (y = 0), donde la aceleración es cero; nunca ambas son máximas a la vez, ni ambas cero en la cresta." },
+
+{ sec: 1, type: "num", topic: "evaluar y y v_y en un punto e instante",
+  q: "Una onda en una cuerda es <span class='formula'>y = 2.0 sen(3x − 12t)</span>con y en cm, x en m y t en s. Calcula la elongación y y la velocidad vertical v<sub>y</sub> (positiva hacia arriba) de la partícula en x = 0.50 m cuando t = 0.10 s (calculadora en radianes).",
+  fields: [
+    { label: "y =", unit: "cm", ans: 2 * Math.sin(0.3), tol: 0.03 },
+    { label: "v<sub>y</sub> =", unit: "cm/s", ans: -24 * Math.cos(0.3), tol: 0.03 }
+  ],
+  exp: "<b>Paso 1.</b> Fase: 3(0.50) − 12(0.10) = 1.5 − 1.2 = 0.3 rad.<br><b>Paso 2.</b> y = 2.0 sen(0.3) = 2.0·0.2955 ≈ 0.59 cm.<br><b>Paso 3.</b> v<sub>y</sub> = ∂y/∂t = −ωA cos(kx − ωt) = −(12)(2.0)cos(0.3) = −24·0.9553 ≈ −22.9 cm/s (el signo negativo: la partícula baja).<br>Error típico: calcular en grados en vez de radianes." },
+
+{ sec: 1, type: "mc", topic: "dirección y tiempo de llegada de una ola",
+  q: "Una boya en x = 0 registra una ola descrita por <span class='formula'>y = 0.80 sen(0.40x + 1.6t) &nbsp; (SI)</span>Hay una playa en x = −200 m y otra en x = +200 m. ¿Hacia dónde viaja la ola y cuánto tarda una cresta en recorrer 200 m?",
+  opts: [
+    "Hacia −x (la playa en x = −200 m); 50 s.",
+    "Hacia +x (la playa en x = +200 m); 50 s.",
+    "Hacia −x (la playa en x = −200 m); 125 s.",
+    "Hacia −x (la playa en x = −200 m); 500 s."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> Con kx + ωt (mismo signo) la onda viaja hacia −x. Su rapidez es v = ω/k = 1.6/0.40 = 4.0 m/s, así que recorre 200 m en 200/4.0 = 50 s.<br><b>Por qué las otras no.</b> «Hacia +x» ignora el signo +. 125 s sale de 200/1.6 (dividir por ω) y 500 s de 200/0.40 (dividir por k): en ambos casos falta la razón ω/k." },
+
+{ sec: 1, type: "mc", topic: "ordenar velocidades transversales máximas (ωA = 2πfA)",
+  q: "Tres ondas viajan por cuerdas distintas. Ordénalas de mayor a menor según la rapidez transversal máxima de las partículas:<span class='formula'>A) A = 2.0 cm, f = 5.0 Hz<br>B) A = 1.0 cm, f = 12 Hz<br>C) A = 4.0 cm, f = 2.0 Hz</span>",
+  opts: ["B > A > C", "C > A > B", "B > C > A", "A > B > C"], ans: 0,
+  exp: "<b>Razonamiento.</b> v<sub>y,máx</sub> = ωA = 2πfA. A: 2π(5.0)(2.0) ≈ 62.8 cm/s; B: 2π(12)(1.0) ≈ 75.4 cm/s; C: 2π(2.0)(4.0) ≈ 50.3 cm/s. Orden: B > A > C.<br><b>Por qué las otras no.</b> Ordenar por amplitud (C primero) o por frecuencia (B primero pero luego C) ignora que cuenta el producto fA." },
+
+{ sec: 1, type: "num", topic: "pulso viajero: rapidez y posición futura",
+  q: "Un pulso se mueve con rapidez constante hacia +x por una cuerda. Su máximo pasa por x = 2.0 m en t = 1.0 s y por x = 8.0 m en t = 4.0 s. Calcula su rapidez y la posición de su máximo en t = 10 s.",
+  fields: [
+    { label: "v =", unit: "m/s", ans: 2, tol: 0.02 },
+    { label: "x(10 s) =", unit: "m", ans: 20, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> v = Δx/Δt = (8.0 − 2.0)/(4.0 − 1.0) = 2.0 m/s.<br><b>Paso 2.</b> Desde t = 4.0 s hasta t = 10 s pasan 6.0 s: x = 8.0 + 2.0·6.0 = 20 m.<br>Comprobación: extrapolando hacia atrás, el máximo estaba en x = 2.0 − 2.0·1.0 = 0 en t = 0, así que también x = vt = 2.0·10 = 20 m. Error típico: usar solo un intervalo (por ejemplo, sumar 2.0 m a la posición de t = 1.0 s y responder 4)." },
+
+{ sec: 1, type: "mc", topic: "reconocer un pulso f(x − vt) con rapidez dada",
+  q: "¿Cuál de estas funciones (SI) representa un pulso que viaja hacia +x con rapidez de 2.0 m/s?",
+  opts: [
+    "y = 3 / [ (x − 2t)² + 1 ]",
+    "y = 3 / [ (x + 2t)² + 1 ]",
+    "y = 3 / [ (2x − t)² + 1 ]",
+    "y = 3 / [ (x − t)² + 2 ]"
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> Un pulso hacia +x con rapidez v es una función de (x − vt). Con v = 2.0 m/s: (x − 2t).<br><b>Por qué las otras no.</b> (x + 2t) tiene la rapidez correcta pero viaja hacia −x. En (2x − t) = 2(x − t/2) el pulso avanza a 0.5 m/s. En (x − t) viaja a 1.0 m/s; el «+2» del denominador solo cambia la altura." },
+
+{ sec: 1, type: "num", topic: "ola del mar: escribir k y ω desde datos medidos",
+  q: "Una ola del mar tiene 1.6 m de altura de cresta a valle, las crestas consecutivas están separadas 20 m, y una cresta pasa por un punto fijo cada 8.0 s. Para escribir y = A sen(kx − ωt) calcula k y ω (en unidades SI).",
+  fields: [
+    { label: "k =", unit: "rad/m", ans: 2 * Math.PI / 20, tol: 0.02 },
+    { label: "ω =", unit: "rad/s", ans: 2 * Math.PI / 8, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> λ = 20 m, entonces k = 2π/λ = 2π/20 ≈ 0.314 rad/m.<br><b>Paso 2.</b> T = 8.0 s, entonces ω = 2π/T = 2π/8.0 ≈ 0.785 rad/s.<br>De paso: la amplitud es A = 0.80 m (mitad de la altura cresta-valle) y v = ω/k = 2.5 m/s.<br>Error típico: usar A = 1.6 m." },
+
+{ sec: 1, type: "num", topic: "dos fotos de una onda: rapidez y frecuencia",
+  q: "Dos fotografías de una onda (λ = 3.0 m) en una cuerda, tomadas con 0.50 s de diferencia, muestran que la misma cresta se movió de x = 1.0 m a x = 2.5 m. ¿Cuál es la rapidez de la onda y su frecuencia?",
+  fields: [
+    { label: "v =", unit: "m/s", ans: 3, tol: 0.02 },
+    { label: "f =", unit: "Hz", ans: 1, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> v = Δx/Δt = (2.5 − 1.0)/0.50 = 3.0 m/s.<br><b>Paso 2.</b> Se despeja f de v = λf: f = v/λ = 3.0/3.0 = 1.0 Hz." },
+
+{ sec: 1, type: "num", topic: "diferencia de fase entre dos puntos de la cuerda",
+  q: "En una cuerda con λ = 0.60 m viaja una onda y = A sen(kx − ωt). Dos puntos están separados 0.10 m. En un mismo instante, ¿cuál es la diferencia de fase kΔx entre ellos, en rad? ¿Qué fracción de longitud de onda los separa?",
+  fields: [
+    { label: "Δφ =", unit: "rad", ans: 2 * Math.PI / 0.6 * 0.1, tol: 0.02 },
+    { label: "Δx/λ =", unit: "", ans: 0.1 / 0.6, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> k = 2π/λ = 2π/0.60 ≈ 10.47 rad/m.<br><b>Paso 2.</b> En el mismo instante la fase difiere solo por el término kx: Δφ = kΔx = 10.47·0.10 ≈ 1.05 rad (= π/3).<br><b>Paso 3.</b> Δx/λ = 0.10/0.60 ≈ 0.167 = 1/6 de longitud de onda; como 2π rad corresponde a una λ completa, 1/6 de 2π es π/3." },
+
+{ sec: 1, type: "num", topic: "despeje inverso: ω y f desde k y v",
+  q: "Una onda viaja por la cuerda de un piano con número de onda k = 20 rad/m y rapidez v = 15 m/s. Calcula su frecuencia angular ω y su frecuencia f.",
+  fields: [
+    { label: "ω =", unit: "rad/s", ans: 300, tol: 0.02 },
+    { label: "f =", unit: "Hz", ans: 300 / (2 * Math.PI), tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> De v = ω/k se despeja ω = vk = 15·20 = 300 rad/s.<br><b>Paso 2.</b> Como ω = 2πf, f = ω/2π = 300/6.283 ≈ 47.7 Hz.<br>Error típico: responder f = 300 (confundir ω con f)." },
+
+
+/* ===================== SECCIÓN 3 · Velocidad en cuerdas y reflexión/transmisión ===================== */
+
+{ sec: 2, type: "num", topic: "despeje de F en v = √(F/μ)",
+  q: "Una cuerda uniforme de 8.0 m de longitud y 0.80 kg de masa está tensa. Un pulso la recorre de un extremo al otro en 0.20 s. ¿Qué tensión tiene la cuerda?",
+  fields: [{ label: "F =", unit: "N", ans: 160, tol: 0.02 }],
+  exp: "<b>Paso 1.</b> μ = m/L = 0.80/8.0 = 0.10 kg/m y v = L/t = 8.0/0.20 = 40 m/s.<br><b>Paso 2.</b> Despejando de v = √(F/μ): F = μv² = 0.10·40² = 160 N." },
+
+{ sec: 2, type: "num", topic: "proporcionalidad de v con F y μ",
+  q: "Se cuadruplica la tensión de una cuerda y, al cambiarla, su densidad lineal μ se reduce a la mitad. ¿Por qué factor se multiplica la rapidez de las ondas en ella?",
+  fields: [{ label: "v₂/v₁ =", unit: "", ans: Math.sqrt(8), tol: 0.02 }],
+  exp: "<b>Paso 1.</b> Como v = √(F/μ), F' = 4F y μ' = μ/2.<br><b>Paso 2.</b> v'/v = √(4/½) = √8 ≈ 2.83.<br>El error típico es olvidar la raíz y responder 8." },
+
+{ sec: 2, type: "mc", topic: "reflexión y transmisión: liviana → pesada",
+  q: "Un pulso positivo viaja por una cuerda liviana y llega a la unión con una cuerda más pesada (misma tensión). ¿Qué ocurre?",
+  opts: [
+    "El pulso reflejado se invierte y el transmitido no; el transmitido viaja más lento.",
+    "El pulso reflejado no se invierte y el transmitido viaja más rápido.",
+    "Ambos pulsos, reflejado y transmitido, se invierten.",
+    "El pulso reflejado se invierte y el transmitido viaja más rápido."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> De liviana a pesada (medio más denso) la reflexión invierte el pulso (cambio de fase de 180°); el transmitido nunca se invierte. La rapidez transmitida es menor porque μ es mayor: v = √(F/μ). El reflejado conserva la rapidez porque sigue en el mismo medio.<br><b>Por qué las otras no.</b> Que el transmitido viaje más rápido exigiría una cuerda más liviana. Que ambos se inviertan o que el reflejado no se invierta contradice lo observado en este caso." },
+
+{ sec: 2, type: "mc", topic: "reflexión en extremo fijo/libre y de pesada a liviana",
+  q: "Para un pulso positivo incidente, ¿cuál conjunto de afirmaciones es totalmente correcto?",
+  opts: [
+    "Extremo fijo: se invierte. Extremo libre: no se invierte. Cuerda pesada → liviana: el reflejado no se invierte.",
+    "Extremo fijo: se invierte. Extremo libre: se invierte. Cuerda pesada → liviana: el reflejado se invierte.",
+    "Extremo fijo: no se invierte. Extremo libre: se invierte. Cuerda liviana → pesada: no se invierte.",
+    "Extremo fijo: se invierte. Extremo libre: no se invierte. Cuerda pesada → liviana: el reflejado se invierte."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> Extremo fijo: la pared ejerce una fuerza que invierte el pulso. Extremo libre (anillo sin fricción): se refleja sin invertirse. Pasar de un medio más denso a uno menos denso se comporta como un extremo libre: el reflejado no se invierte y parte se transmite.<br><b>Por qué las otras no.</b> Cada alternativa incorrecta cambia al menos una de las tres reglas; por ejemplo, invertir el reflejado en pesada → liviana lo trata como si fuera un extremo fijo." },
+
+{ sec: 2, type: "num", topic: "cuerda de guitarra: μ = m/L y v = √(F/μ)",
+  q: "Una cuerda de guitarra mide 0.65 m, tiene una masa de 5.2 g y está bajo una tensión de 65 N. Calcula su densidad lineal μ y la rapidez v de un pulso en ella.",
+  fields: [
+    { label: "μ =", unit: "kg/m", ans: 0.0052 / 0.65, tol: 0.02 },
+    { label: "v =", unit: "m/s", ans: Math.sqrt(65 / 0.008), tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> Pasar la masa a kg: 5.2 g = 0.0052 kg. μ = m/L = 0.0052/0.65 = 0.0080 kg/m.<br><b>Paso 2.</b> v = √(F/μ) = √(65/0.0080) = √8125 ≈ 90 m/s.<br>Error típico: usar 5.2 (gramos) sin convertir." },
+
+{ sec: 2, type: "num", topic: "despeje de μ: cuerda de piano",
+  q: "En un piano, una onda viaja a 250 m/s por una cuerda sometida a una tensión de 700 N. Calcula la densidad lineal μ y la masa de un tramo de 0.90 m de esa cuerda, en gramos.",
+  fields: [
+    { label: "μ =", unit: "kg/m", ans: 700 / 62500, tol: 0.02 },
+    { label: "m =", unit: "g", ans: 700 / 62500 * 0.9 * 1000, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> De v = √(F/μ) se despeja μ = F/v² = 700/250² = 700/62500 = 0.0112 kg/m.<br><b>Paso 2.</b> m = μL = 0.0112·0.90 = 0.01008 kg = 10.08 g.<br>Error típico: olvidar elevar v al cuadrado." },
+
+{ sec: 2, type: "num", topic: "tensión por un bloque colgante y rapidez del pulso",
+  q: "Una cuerda de 2.0 m y 0.060 kg tiene un extremo atado a un poste; el otro pasa por una polea sin fricción y sostiene, en reposo, un bloque de 3.0 kg (g = 9.8 m/s²). Calcula la tensión de la cuerda y la rapidez con que viaja un pulso por ella.",
+  fields: [
+    { label: "F =", unit: "N", ans: 3 * 9.8, tol: 0.02 },
+    { label: "v =", unit: "m/s", ans: Math.sqrt(29.4 / 0.03), tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> Con el bloque en reposo, la tensión equilibra su peso: F = mg = 3.0·9.8 = 29.4 N.<br><b>Paso 2.</b> μ = 0.060/2.0 = 0.030 kg/m.<br><b>Paso 3.</b> v = √(F/μ) = √(29.4/0.030) = √980 ≈ 31 m/s." },
+
+{ sec: 2, type: "mc", topic: "despeje: cuánto cambiar F para duplicar v",
+  q: "Un técnico quiere duplicar la rapidez de las ondas en una cuerda sin cambiarla (μ constante). ¿Qué debe hacer con la tensión?",
+  opts: [
+    "Multiplicarla por 4.",
+    "Duplicarla.",
+    "Multiplicarla por √2.",
+    "Reducirla a la mitad."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> De v = √(F/μ) se despeja F = μv². Si v se duplica, v² se cuadruplica y por tanto F debe cuadruplicarse.<br><b>Por qué las otras no.</b> Duplicar F solo multiplica v por √2 ≈ 1.41; multiplicar por √2 daría v × 1.19; reducir F a la mitad disminuiría v." },
+
+{ sec: 2, type: "mc", topic: "qué pasa si se aumenta la tensión con f fija",
+  q: "Una fuente que vibra con frecuencia constante produce ondas en una cuerda. Se aumenta la tensión de la cuerda sin cambiar la fuente. ¿Qué ocurre con la rapidez y la longitud de onda de las ondas?",
+  opts: [
+    "La rapidez aumenta y la longitud de onda aumenta.",
+    "La rapidez aumenta y la longitud de onda disminuye.",
+    "La rapidez no cambia y la longitud de onda aumenta.",
+    "La rapidez aumenta y la longitud de onda no cambia."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> Más tensión implica mayor v = √(F/μ). La frecuencia la impone la fuente, así que λ = v/f crece.<br><b>Por qué las otras no.</b> Si λ disminuyera con v mayor y f fija, se violaría v = λf. Si v no cambiara, la tensión no importaría, pero sí importa. Si λ no cambiara, f tendría que subir." },
+
+{ sec: 2, type: "num", topic: "cuerda compuesta: v y λ transmitidas con f constante",
+  q: "Una cuerda liviana (μ₁ = 0.010 kg/m) está unida a una más pesada (μ₂ = 0.040 kg/m). Ambas soportan la misma tensión, 64 N. Una fuente hace vibrar la cuerda liviana a 20 Hz, y esa misma frecuencia se mantiene en la cuerda pesada. Calcula la rapidez v₂ y la longitud de onda λ₂ de la onda transmitida.",
+  fields: [
+    { label: "v₂ =", unit: "m/s", ans: 40, tol: 0.02 },
+    { label: "λ₂ =", unit: "m", ans: 2, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> v₂ = √(F/μ₂) = √(64/0.040) = √1600 = 40 m/s (en la liviana sería 80 m/s).<br><b>Paso 2.</b> Con la misma frecuencia, λ₂ = v₂/f = 40/20 = 2.0 m (la mitad de λ₁ = 4.0 m).<br>Idea clave: al pasar a un medio más pesado, la onda se hace más lenta y más corta." },
+
+{ sec: 2, type: "mc", topic: "reflexión y transmisión: pesada → liviana",
+  q: "Un pulso positivo (hacia arriba) viaja por una cuerda pesada y llega a la unión con una cuerda más liviana (misma tensión). ¿Qué ocurre?",
+  opts: [
+    "El reflejado no se invierte, el transmitido tampoco, y el transmitido viaja más rápido que el incidente.",
+    "El reflejado se invierte y el transmitido viaja más lento.",
+    "El reflejado no se invierte y el transmitido viaja más lento.",
+    "El reflejado se invierte y el transmitido viaja más rápido."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> De un medio más denso a uno menos denso, el reflejado no se invierte; el transmitido nunca se invierte. Al ser μ menor, la rapidez transmitida v = √(F/μ) es mayor.<br><b>Por qué las otras no.</b> Invertir el reflejado corresponde al caso opuesto (liviana → pesada). «Más lento» contradice μ menor." },
+
+{ sec: 2, type: "mc", topic: "extremo fijo: tiempo de regreso y forma del pulso",
+  q: "Una cuerda de 12 m tiene su extremo derecho atado a un poste. Un pulso hacia arriba, cuyo máximo está en el extremo izquierdo (x = 0) en t = 0, viaja hacia la derecha a 6.0 m/s. ¿En qué instante el máximo del pulso reflejado vuelve a x = 0 y cómo se ve?",
+  opts: [
+    "En t = 4.0 s; hacia abajo (invertido).",
+    "En t = 4.0 s; hacia arriba.",
+    "En t = 2.0 s; hacia abajo (invertido).",
+    "En t = 2.0 s; hacia arriba."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> El pulso recorre 12 m de ida y 12 m de regreso: 24 m a 6.0 m/s, es decir t = 24/6.0 = 4.0 s. En un extremo fijo el pulso se refleja invertido.<br><b>Por qué las otras no.</b> 2.0 s es el tiempo solo de ida (olvida el regreso). «Hacia arriba» sería lo que ocurre en un extremo libre." },
+
+{ sec: 2, type: "num", topic: "cuerda compuesta: tiempo de tránsito por cada tramo",
+  q: "Una cuerda compuesta tiene un tramo liviano de 4.0 m (μ₁ = 0.010 kg/m) unido a un tramo pesado de 6.0 m (μ₂ = 0.040 kg/m), con tensión de 64 N en toda la cuerda. Un pulso entra por el extremo liviano. Calcula el tiempo que tarda en cruzar el tramo liviano y el tiempo total para recorrer los dos tramos.",
+  fields: [
+    { label: "t<sub>1</sub> =", unit: "s", ans: 0.05, tol: 0.02 },
+    { label: "t<sub>total</sub> =", unit: "s", ans: 0.2, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> v₁ = √(64/0.010) = 80 m/s y v₂ = √(64/0.040) = 40 m/s.<br><b>Paso 2.</b> t<sub>1</sub> = 4.0/80 = 0.050 s y t<sub>2</sub> = 6.0/40 = 0.15 s.<br><b>Paso 3.</b> t<sub>total</sub> = 0.050 + 0.15 = 0.20 s.<br>Error típico: usar una sola rapidez para los 10 m." },
+
+{ sec: 2, type: "num", topic: "puente colgante: rapidez de un pulso en un cable",
+  q: "Un cable de un puente colgante tiene μ = 25 kg/m y soporta una tensión de 4.0×10⁵ N. Un golpe en un extremo genera un pulso transversal. Calcula la rapidez del pulso y el tiempo que tarda en recorrer 60 m del cable.",
+  fields: [
+    { label: "v =", unit: "m/s", ans: Math.sqrt(4e5 / 25), tol: 0.02 },
+    { label: "t =", unit: "s", ans: 60 / Math.sqrt(4e5 / 25), tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> v = √(F/μ) = √(4.0×10⁵/25) = √16000 ≈ 126 m/s.<br><b>Paso 2.</b> t = x/v = 60/126.5 ≈ 0.47 s.<br>Error típico: escribir 4.0×10⁵ como 4.0×5 al teclear la tensión." },
+
+{ sec: 2, type: "mc", topic: "ordenar rapideces según F y μ",
+  q: "Cuatro cuerdas distintas transmiten pulsos. Ordénalas de mayor a menor según la rapidez de las ondas:<span class='formula'>A) F = 90 N, μ = 0.10 kg/m &nbsp;&nbsp; B) F = 160 N, μ = 0.10 kg/m<br>C) F = 90 N, μ = 0.050 kg/m &nbsp; D) F = 50 N, μ = 0.020 kg/m</span>",
+  opts: ["D > C > B > A", "B > A > C > D", "C > D > B > A", "B > D > C > A"], ans: 0,
+  exp: "<b>Razonamiento.</b> v = √(F/μ): A: √900 = 30 m/s; B: √1600 = 40 m/s; C: √1800 ≈ 42.4 m/s; D: √2500 = 50 m/s. Orden: D > C > B > A.<br><b>Por qué las otras no.</b> Ordenar solo por F (B primero) o solo por μ ignora que la rapidez depende de la razón F/μ." },
+
+{ sec: 2, type: "num", topic: "despeje encadenado: v = λf y luego F = μv²",
+  q: "Una cuerda de μ = 0.020 kg/m se hace vibrar con f = 200 Hz y se mide una longitud de onda λ = 0.50 m. Calcula la rapidez de la onda y la tensión de la cuerda.",
+  fields: [
+    { label: "v =", unit: "m/s", ans: 100, tol: 0.02 },
+    { label: "F =", unit: "N", ans: 200, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> v = λf = 0.50·200 = 100 m/s.<br><b>Paso 2.</b> De v = √(F/μ): F = μv² = 0.020·100² = 200 N." },
+
+{ sec: 2, type: "num", topic: "cuerdas gruesa y delgada del mismo material",
+  q: "Dos cuerdas de guitarra son del mismo material, tienen la misma longitud y la misma tensión, pero la gruesa tiene el doble de diámetro (por tanto 4 veces el área transversal y 4 veces la masa). ¿Por qué factor se multiplica la rapidez de las ondas al pasar de la cuerda delgada a la gruesa?",
+  fields: [{ label: "v<sub>gruesa</sub>/v<sub>delgada</sub> =", unit: "", ans: 0.5, tol: 0.02 }],
+  exp: "<b>Paso 1.</b> Con la misma longitud, μ = m/L es 4 veces mayor en la gruesa.<br><b>Paso 2.</b> Con F igual, v ∝ 1/√μ: v<sub>gruesa</sub>/v<sub>delgada</sub> = √(1/4) = 0.50.<br>Por eso las cuerdas graves (más gruesas) tienen ondas más lentas." },
+
+{ sec: 2, type: "mc", topic: "amplitudes reflejada y transmitida (liviana → pesada)",
+  q: "Un pulso hacia arriba de 4.0 cm de altura llega a la unión de una cuerda liviana con una más pesada. Según lo observado (las amplitudes reflejada y transmitida son menores que la incidente; el reflejado se invierte y el transmitido no), ¿cuál de estos resultados es posible?",
+  opts: [
+    "Reflejado: −1.5 cm; transmitido: +2.5 cm.",
+    "Reflejado: +1.5 cm; transmitido: +2.5 cm.",
+    "Reflejado: −1.5 cm; transmitido: +5.5 cm.",
+    "Reflejado: −2.0 cm; transmitido: −2.0 cm."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> Reflejado invertido: negativo. Transmitido sin invertir: positivo. Ambos con magnitud menor que 4.0 cm: −1.5 cm y +2.5 cm cumplen todo.<br><b>Por qué las otras no.</b> «+1.5 cm» reflejado no está invertido. «+5.5 cm» supera la amplitud incidente. «−2.0 cm» transmitido lo invierte, y el transmitido nunca se invierte." },
+
+{ sec: 2, type: "mc", topic: "extremo libre: pulso hacia abajo",
+  q: "El extremo izquierdo de una cuerda está unido a un anillo que se desliza sin fricción por una barra vertical. Se envía hacia la izquierda un pulso «hacia abajo» (negativo). ¿Cómo regresa el pulso reflejado?",
+  opts: [
+    "Hacia abajo (sin invertirse) y con la misma rapidez.",
+    "Hacia arriba (invertido) y con la misma rapidez.",
+    "Hacia abajo, pero con mayor rapidez porque el anillo se mueve.",
+    "No hay pulso reflejado: el anillo lo absorbe."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> Un extremo libre refleja sin invertir y conserva forma y velocidad de propagación. Si llegó hacia abajo, regresa hacia abajo.<br><b>Por qué las otras no.</b> Invertir el pulso es lo que hace un extremo fijo. La rapidez la fija el medio (la cuerda), no el anillo. Un anillo ideal sin fricción no absorbe energía." },
+
+{ sec: 2, type: "num", topic: "extremo libre: rapidez y tiempo de ida y vuelta",
+  q: "Una cuerda de 10 m con μ = 0.050 kg/m y tensión de 45 N tiene su extremo derecho unido a un anillo sin fricción. Un pulso sale del extremo izquierdo hacia la derecha. Calcula la rapidez del pulso y el tiempo hasta que el pulso reflejado regresa al extremo izquierdo.",
+  fields: [
+    { label: "v =", unit: "m/s", ans: 30, tol: 0.02 },
+    { label: "t =", unit: "s", ans: 20 / 30, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> v = √(F/μ) = √(45/0.050) = √900 = 30 m/s.<br><b>Paso 2.</b> El pulso recorre 10 m de ida y 10 m de regreso (el extremo libre refleja sin invertir): t = 20/30 ≈ 0.67 s." },
+
+
+/* ===================== SECCIÓN 4 · Superposición, interferencia y energía ===================== */
+
+{ sec: 3, type: "num", topic: "interferencia constructiva/destructiva y desfase",
+  q: "Dos ondas armónicas de igual frecuencia viajan por el mismo medio, con A<sub>1</sub> = 3.0 cm y A<sub>2</sub> = 5.0 cm. Calcula la amplitud de la onda resultante si el desfase entre ellas es (a) 0 y (b) 3π rad.",
+  fields: [
+    { label: "(a) A<sub>R</sub> =", unit: "cm", ans: 8, tol: 0.01 },
+    { label: "(b) A<sub>R</sub> =", unit: "cm", ans: 2, tol: 0.01 }
+  ],
+  exp: "<b>Paso 1.</b> (a) En fase: interferencia constructiva, A<sub>R</sub> = 3 + 5 = 8 cm.<br><b>Paso 2.</b> (b) Un desfase de 3π equivale a π (se restan vueltas de 2π): interferencia destructiva, A<sub>R</sub> = |5 − 3| = 2 cm." },
+
+{ sec: 3, type: "mc", topic: "energía en la interferencia destructiva",
+  q: "Dos pulsos triangulares idénticos, uno hacia arriba y otro hacia abajo, viajan en sentidos opuestos por una cuerda. En el instante en que se superponen exactamente, la cuerda se ve completamente recta. ¿Qué pasó con la energía?",
+  opts: [
+    "Es energía cinética: los elementos de la cuerda se mueven con rapidez máxima aunque la cuerda parezca plana.",
+    "Se destruyó por la interferencia destructiva y reaparece después por reflexión.",
+    "Es cero, porque y = 0 en todos los puntos.",
+    "Se duplicó, por el principio de superposición."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> La superposición suma desplazamientos, no energías. Con y = 0 la energía potencial elástica es mínima, pero la energía total se conserva: está en forma de energía cinética, porque cada punto de la cuerda tiene velocidad. Los pulsos siguen su camino intactos después de cruzarse.<br><b>Por qué las otras no.</b> La energía no se destruye; y = 0 no implica energía cero (que la cuerda esté plana no significa que esté quieta); y superponer no duplica la energía." },
+
+{ sec: 3, type: "num", topic: "cálculo de f y de potencia P",
+  q: "Si v = 20 m/s y λ = 4 m, ¿cuál es f? Luego, si A = 0.5 m y la cuerda tiene μ = 0.05 kg/m, ¿cuál es la potencia media transmitida? Usa <b>P = ½ μ ω² A² v</b>.",
+  fields: [
+    { label: "f =", unit: "Hz", ans: 5, tol: 0.01 },
+    { label: "P =", unit: "W", ans: 0.5 * 0.05 * Math.pow(2 * Math.PI * 5, 2) * 0.25 * 20, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> f = v/λ = 20/4 = 5 Hz.<br><b>Paso 2.</b> ω = 2πf ≈ 31.42 rad/s (usa ω, no f).<br><b>Paso 3.</b> P = ½(0.05)(31.42)²(0.5)²(20) ≈ 123 W." },
+
+{ sec: 3, type: "num", topic: "proporcionalidad de la potencia (ω²A²)",
+  q: "En una misma cuerda con tensión fija, se triplica la amplitud de la onda y se reduce a la mitad su frecuencia. ¿Por qué factor se multiplica la potencia transmitida?",
+  fields: [{ label: "P₂/P₁ =", unit: "", ans: 2.25, tol: 0.01 }],
+  exp: "<b>Paso 1.</b> P = ½ μ ω² A² v. La cuerda y la tensión no cambian, así que μ y v tampoco.<br><b>Paso 2.</b> Solo cambian ω (×½) y A (×3): P₂/P₁ = (½)²·3² = 9/4 = 2.25." },
+
+{ sec: 3, type: "num", topic: "cancelación de ruido: amplitud residual",
+  q: "Unos auriculares con cancelación de ruido generan una onda de la misma frecuencia que el ruido, pero desfasada π rad. El ruido tiene amplitud 5.0 (unidades arbitrarias) y, por imprecisión, el sistema produce una onda de amplitud 4.6. ¿Cuál es la amplitud del ruido que llega al oído y en qué porcentaje se redujo el ruido?",
+  fields: [
+    { label: "A<sub>R</sub> =", unit: "u. arb.", ans: 0.4, tol: 0.02 },
+    { label: "Reducción =", unit: "%", ans: 92, tol: 0.01 }
+  ],
+  exp: "<b>Paso 1.</b> Desfase π: interferencia destructiva, A<sub>R</sub> = |5.0 − 4.6| = 0.4.<br><b>Paso 2.</b> Reducción = (5.0 − 0.4)/5.0 = 4.6/5.0 = 0.92 = 92 %.<br>Idea clave: la cancelación es total solo si las amplitudes son iguales." },
+
+{ sec: 3, type: "mc", topic: "superposición de pulsos de signo opuesto",
+  q: "Dos pulsos triangulares con la misma forma viajan en sentidos opuestos por una cuerda: uno de +4.0 cm (hacia arriba) y otro de −1.0 cm (hacia abajo). En el instante en que sus picos coinciden, ¿cuánto vale el desplazamiento en ese punto y cómo son los pulsos después?",
+  opts: [
+    "+3.0 cm; después siguen su camino sin alterarse.",
+    "+3.0 cm; después quedan combinados en un único pulso de +3.0 cm.",
+    "+5.0 cm; después siguen su camino sin alterarse.",
+    "−3.0 cm; después siguen su camino sin alterarse."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> Por superposición, el desplazamiento resultante es la suma algebraica: +4.0 + (−1.0) = +3.0 cm. Los pulsos se cruzan y continúan con su forma original.<br><b>Por qué las otras no.</b> Sumar sin signo (5.0 cm) ignora que uno es negativo. −3.0 cm invierte el orden de la resta. Y los pulsos no se fusionan de forma permanente." },
+
+{ sec: 3, type: "num", topic: "superposición de dos funciones de pulso",
+  q: "Dos pulsos viajan en sentidos opuestos por una cuerda, con funciones<span class='formula'>y<sub>1</sub> = 4 / [ (x − 2t)² + 2 ] &nbsp;&nbsp; y<sub>2</sub> = −4 / [ (x + 2t)² + 2 ] &nbsp; (SI)</span>Calcula el desplazamiento resultante de la cuerda en x = 1.0 m y t = 0.50 s.",
+  fields: [{ label: "y =", unit: "m", ans: 2 - 4 / 6, tol: 0.02 }],
+  exp: "<b>Paso 1.</b> y<sub>1</sub>: x − 2t = 1.0 − 1.0 = 0, entonces y<sub>1</sub> = 4/2 = 2.0 m.<br><b>Paso 2.</b> y<sub>2</sub>: x + 2t = 1.0 + 1.0 = 2.0, entonces y<sub>2</sub> = −4/(4 + 2) ≈ −0.667 m.<br><b>Paso 3.</b> Por superposición, y = y<sub>1</sub> + y<sub>2</sub> = 2.0 − 0.667 ≈ 1.33 m." },
+
+{ sec: 3, type: "num", topic: "cambio de cuerda: cómo cambian v y la potencia",
+  q: "Una fuente mantiene la misma frecuencia angular ω y la misma amplitud A. Se cambia a una cuerda con densidad lineal μ 4 veces mayor y tensión 9 veces mayor. ¿Por qué factor cambian la rapidez de la onda y la potencia transmitida?",
+  fields: [
+    { label: "v₂/v₁ =", unit: "", ans: 1.5, tol: 0.02 },
+    { label: "P₂/P₁ =", unit: "", ans: 6, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> v = √(F/μ): v₂/v₁ = √(9/4) = 1.5.<br><b>Paso 2.</b> Con ω y A fijas, P = ½ μ ω² A² v es proporcional a μv: P₂/P₁ = 4·1.5 = 6.<br>Error típico: olvidar que también μ aparece explícitamente en P (y responder 1.5)." },
+
+{ sec: 3, type: "num", topic: "despeje de ω desde la potencia",
+  q: "Una cuerda de μ = 0.050 kg/m transmite una potencia media de 20 W con una onda de amplitud 2.0 cm que viaja a 40 m/s. Despeja de P = ½ μ ω² A² v la frecuencia angular ω y calcula además la frecuencia f.",
+  fields: [
+    { label: "ω =", unit: "rad/s", ans: Math.sqrt(2 * 20 / (0.05 * 0.0004 * 40)), tol: 0.02 },
+    { label: "f =", unit: "Hz", ans: Math.sqrt(2 * 20 / (0.05 * 0.0004 * 40)) / (2 * Math.PI), tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> Despeje: ω² = 2P/(μA²v) = 2(20)/[0.050·(0.020)²·40] = 40/(8.0×10⁻⁴) = 50000.<br><b>Paso 2.</b> ω = √50000 ≈ 224 rad/s.<br><b>Paso 3.</b> f = ω/2π ≈ 35.6 Hz.<br>Error típico: usar A = 2.0 sin pasar a metros." },
+
+{ sec: 3, type: "num", topic: "despeje de la amplitud desde la potencia (cuerda de una máquina)",
+  q: "La cuerda de una máquina tiene μ = 0.20 kg/m y tensión de 500 N. Debe transmitir una potencia media de 35 W con una onda de frecuencia 25 Hz. Calcula la rapidez de la onda y la amplitud necesaria, en cm.",
+  fields: [
+    { label: "v =", unit: "m/s", ans: 50, tol: 0.02 },
+    { label: "A =", unit: "cm", ans: 100 * Math.sqrt(2 * 35 / (0.2 * Math.pow(2 * Math.PI * 25, 2) * 50)), tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> v = √(F/μ) = √(500/0.20) = 50 m/s y ω = 2π(25) ≈ 157.1 rad/s.<br><b>Paso 2.</b> Despeje: A² = 2P/(μω²v) = 70/(0.20·24674·50) ≈ 2.84×10⁻⁴ m².<br><b>Paso 3.</b> A ≈ 0.01684 m ≈ 1.68 cm." },
+
+{ sec: 3, type: "mc", topic: "ordenar potencias transmitidas (fA)²",
+  q: "Tres ondas viajan por la misma cuerda (misma tensión). Ordénalas de mayor a menor según la potencia que transmiten:<span class='formula'>A) A = 1.0 cm, f = 40 Hz<br>B) A = 2.0 cm, f = 30 Hz<br>C) A = 3.0 cm, f = 15 Hz</span>",
+  opts: ["B > C > A", "C > B > A", "A > B > C", "B > A > C"], ans: 0,
+  exp: "<b>Razonamiento.</b> Con μ y v iguales, P ∝ ω²A² ∝ (fA)². A: fA = 40 → 1600; B: fA = 60 → 3600; C: fA = 45 → 2025. Orden: B > C > A.<br><b>Por qué las otras no.</b> Ordenar solo por amplitud (C, B, A) o solo por frecuencia (A, B, C) es mirar una sola variable; la potencia depende del producto." },
+
+{ sec: 3, type: "num", topic: "potencia: compensación entre f y A",
+  q: "En una misma cuerda con tensión fija, se triplica la frecuencia de la onda y, al mismo tiempo, la amplitud se reduce a un tercio. ¿Por qué factor se multiplica la potencia transmitida?",
+  fields: [{ label: "P₂/P₁ =", unit: "", ans: 1, tol: 0.01 }],
+  exp: "<b>Paso 1.</b> Como μ y v no cambian, P ∝ ω²A² = (ωA)².<br><b>Paso 2.</b> ω se triplica y A se divide entre 3, así que ωA no cambia: P₂/P₁ = (3·⅓)² = 1.<br>La potencia se mantiene igual." },
+
+{ sec: 3, type: "num", topic: "amplitud resultante mínima y máxima",
+  q: "Dos fuentes producen en una cuerda ondas de la misma frecuencia con amplitudes de 6.0 cm y 2.0 cm. Considerando solo los casos extremos (ondas en fase y ondas en oposición de fase), ¿cuál es la amplitud resultante mínima y la máxima?",
+  fields: [
+    { label: "A<sub>mín</sub> =", unit: "cm", ans: 4, tol: 0.01 },
+    { label: "A<sub>máx</sub> =", unit: "cm", ans: 8, tol: 0.01 }
+  ],
+  exp: "<b>Paso 1.</b> En oposición de fase (destructiva): A<sub>mín</sub> = |6.0 − 2.0| = 4.0 cm.<br><b>Paso 2.</b> En fase (constructiva): A<sub>máx</sub> = 6.0 + 2.0 = 8.0 cm.<br>Como las amplitudes son distintas, la cancelación total es imposible." },
+
+{ sec: 3, type: "num", topic: "olas en un muelle: superposición con signo",
+  q: "En un muelle coinciden dos olas en el mismo punto. Caso 1: una cresta de +0.50 m con otra cresta de +0.30 m. Caso 2: un valle de −0.50 m con una cresta de +0.30 m. Calcula el desplazamiento resultante en cada caso.",
+  fields: [
+    { label: "Caso 1: y =", unit: "m", ans: 0.8, tol: 0.02 },
+    { label: "Caso 2: y =", unit: "m", ans: -0.2, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> Por superposición, se suman algebraicamente los desplazamientos.<br><b>Paso 2.</b> Caso 1: 0.50 + 0.30 = +0.80 m (constructiva).<br><b>Paso 3.</b> Caso 2: −0.50 + 0.30 = −0.20 m (destructiva parcial: gana el valle, más grande).<br>Error típico: dar +0.20 en el caso 2, perdiendo el signo." },
+
+{ sec: 3, type: "num", topic: "energía y potencia de una onda en un tramo de cuerda",
+  q: "Un tramo de cuerda de 0.50 m (μ = 0.040 kg/m) transporta una onda senoidal con ω = 60 rad/s y A = 3.0 cm que viaja a 20 m/s. (a) Calcula la energía del tramo con E = ½(μΔx)ω²A². (b) Calcula la potencia sabiendo que la onda recorre el tramo en Δx/v y que potencia = energía/tiempo.",
+  fields: [
+    { label: "(a) E =", unit: "J", ans: 0.5 * 0.04 * 0.5 * 3600 * 0.0009, tol: 0.02 },
+    { label: "(b) P =", unit: "W", ans: 0.5 * 0.04 * 3600 * 0.0009 * 20, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> E = ½(0.040·0.50)(60)²(0.030)² = ½(0.020)(3600)(9.0×10⁻⁴) = 0.0324 J.<br><b>Paso 2.</b> Tiempo en recorrer el tramo: Δt = 0.50/20 = 0.025 s.<br><b>Paso 3.</b> P = E/Δt = 0.0324/0.025 = 1.30 W.<br>Comprobación con P = ½μω²A²v = ½(0.040)(3600)(9.0×10⁻⁴)(20) = 1.296 W." },
+
+{ sec: 3, type: "mc", topic: "qué combinación multiplica por 8 la potencia",
+  q: "En una misma cuerda con tensión fija, ¿cuál de estos cambios multiplica por 8 la potencia transmitida por la onda?",
+  opts: [
+    "Duplicar la amplitud y multiplicar la frecuencia por √2.",
+    "Duplicar la amplitud y duplicar la frecuencia.",
+    "Multiplicar por 8 la amplitud, manteniendo la frecuencia.",
+    "Duplicar la frecuencia, manteniendo la amplitud."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> Con μ y v fijos, P ∝ ω²A². Duplicar A da ×4 y multiplicar ω por √2 da ×2: en total ×8.<br><b>Por qué las otras no.</b> Duplicar A y f da 4·4 = 16. Multiplicar A por 8 da 64. Duplicar solo f da 4." },
+
+{ sec: 3, type: "mc", topic: "error de fase en auriculares con cancelación de ruido",
+  q: "En unos auriculares con cancelación de ruido, por un error de calibración el sistema emite el «antirruido» con la misma amplitud y frecuencia que el ruido, pero en fase (desfase 0) en lugar de desfasado π rad. ¿Qué percibe el usuario?",
+  opts: [
+    "Un ruido de amplitud doble: interferencia constructiva.",
+    "Silencio total: interferencia destructiva.",
+    "Un ruido con la mitad de la amplitud.",
+    "El mismo ruido de antes: la superposición no cambia la amplitud."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> Dos ondas iguales en fase se suman: A<sub>R</sub> = A + A = 2A, interferencia constructiva. El sistema empeora el ruido en vez de cancelarlo.<br><b>Por qué las otras no.</b> El silencio requiere desfase π. «Mitad de la amplitud» y «sin cambio» no corresponden a ninguna suma de ondas iguales en fase." },
+
+{ sec: 3, type: "mc", topic: "forma de la gráfica P contra F (μ, ω y A fijos)",
+  q: "Una fuente mantiene fijas ω y A y se cambia solo la tensión F de una misma cuerda. Se mide la potencia media P transmitida. Si se grafica P contra F, ¿qué forma tiene la curva?",
+  opts: [
+    "Creciente y cóncava hacia abajo, tipo raíz cuadrada (P ∝ √F).",
+    "Una recta que pasa por el origen (P ∝ F).",
+    "Una parábola creciente (P ∝ F²).",
+    "Una curva decreciente (P ∝ 1/F)."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> En P = ½ μ ω² A² v, con μ, ω y A fijos solo varía v = √(F/μ). Por tanto P ∝ v ∝ √F: crece, pero cada vez más lento.<br><b>Por qué las otras no.</b> Una recta o una parábola supondrían que P depende de F o de F² directamente; la tensión entra a través de v con raíz. La curva decreciente contradice que v aumenta con F." },
+
+{ sec: 3, type: "mc", topic: "superposición con desfases π y 2π en la función de onda",
+  q: "Sobre la misma cuerda viajan tres ondas (SI):<span class='formula'>y<sub>1</sub> = 3 sen(2x − 5t) &nbsp; y<sub>2</sub> = 3 sen(2x − 5t + π)<br>y<sub>3</sub> = 3 sen(2x − 5t + 2π)</span>Por el principio de superposición, ¿cuál es el resultado de y<sub>1</sub> + y<sub>2</sub> y de y<sub>1</sub> + y<sub>3</sub>?",
+  opts: [
+    "y<sub>1</sub> + y<sub>2</sub> = 0; y<sub>1</sub> + y<sub>3</sub> = 6 sen(2x − 5t).",
+    "y<sub>1</sub> + y<sub>2</sub> = 6 sen(2x − 5t); y<sub>1</sub> + y<sub>3</sub> = 0.",
+    "y<sub>1</sub> + y<sub>2</sub> = 0; y<sub>1</sub> + y<sub>3</sub> = 0.",
+    "y<sub>1</sub> + y<sub>2</sub> = 6 sen(2x − 5t); y<sub>1</sub> + y<sub>3</sub> = 6 sen(2x − 5t)."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> Sumar π a la fase invierte el seno: sen(θ + π) = −sen θ, así que y<sub>2</sub> = −y<sub>1</sub> y la suma es 0 (destructiva total). Sumar 2π regresa al mismo valor: sen(θ + 2π) = sen θ, entonces y<sub>3</sub> = y<sub>1</sub> y la suma es 6 sen(2x − 5t) (constructiva).<br><b>Por qué las otras no.</b> Las demás intercambian los casos o suponen que π y 2π dan el mismo efecto." },
+
+{ sec: 3, type: "mc", topic: "ordenar amplitudes resultantes de cuatro interferencias",
+  q: "Dos ondas armónicas de la misma frecuencia se superponen en cuatro casos. Ordena de mayor a menor la amplitud resultante:<span class='formula'>I) 3 cm y 4 cm, en fase &nbsp;&nbsp; II) 5 cm y 5 cm, en oposición de fase<br>III) 6 cm y 2 cm, en oposición de fase &nbsp;&nbsp; IV) 2 cm y 3 cm, en fase</span>",
+  opts: ["I > IV > III > II", "I > III > IV > II", "III > I > IV > II", "I > IV > II > III"], ans: 0,
+  exp: "<b>Razonamiento.</b> I: 3 + 4 = 7 cm; II: |5 − 5| = 0; III: |6 − 2| = 4 cm; IV: 2 + 3 = 5 cm. Orden: I (7) > IV (5) > III (4) > II (0).<br><b>Por qué las otras no.</b> Colocar III sobre IV ignora que IV está en fase y suma; colocar II sobre III olvida que 5 cm y 5 cm en oposición se cancelan por completo." },
+
+
+/* ===================== SECCIÓN 5 · Ecuación de onda lineal ===================== */
+
+{ sec: 4, type: "mc", topic: "verificar soluciones de la ecuación de onda",
+  q: "La ecuación de onda lineal es <span class='formula'>∂²y/∂x² = (1/v²) ∂²y/∂t²</span>¿Cuáles de estas funciones (SI) la satisfacen con v = 4 m/s?<span class='formula'>I) y = 5 sen(3x + 12t) &nbsp; II) y = 2 cos(2x − 6t)<br>III) y = 0.1(x − 4t)² &nbsp; IV) y = 7 sen(4x − 8t)</span>",
+  opts: ["Solo I", "I y III", "II y IV", "I, II y III"], ans: 1,
+  exp: "<b>Razonamiento.</b> Para una senoidal, v = ω/k: I) 12/3 = 4 ✓; II) 6/2 = 3 ✗; IV) 8/4 = 2 ✗. La III es de la forma f(x − 4t): cualquier función derivable de (x − vt) cumple la ecuación con esa v (∂²y/∂x² = 0.2 y ∂²y/∂t² = 3.2 = 16·0.2 ✓). Respuesta: I y III.<br><b>Por qué las otras no.</b> «Solo I» olvida que las funciones no senoidales también pueden ser solución. Incluir II supone que la forma coseno basta sin revisar ω/k." },
+
+{ sec: 4, type: "num", topic: "despeje de v y ω desde la ecuación de onda",
+  q: "Una onda y = A sen(kx − ωt) satisface <span class='formula'>∂²y/∂t² = 25 ∂²y/∂x²</span>con k = 2.5 rad/m. Calcula v y ω.",
+  fields: [
+    { label: "v =", unit: "m/s", ans: 5, tol: 0.01 },
+    { label: "ω =", unit: "rad/s", ans: 12.5, tol: 0.01 }
+  ],
+  exp: "<b>Paso 1.</b> Al comparar con ∂²y/∂t² = v² ∂²y/∂x², el coeficiente es v² = 25, así que v = 5 m/s (no 25).<br><b>Paso 2.</b> ω = vk = 5·2.5 = 12.5 rad/s." },
+
+{ sec: 4, type: "num", topic: "aplicar v² = F/μ y f = v/λ",
+  q: "Una cuerda de μ = 0.10 kg/m está bajo una tensión F = 90 N. Su ecuación de onda es ∂²y/∂t² = C ∂²y/∂x². Calcula C y, para una onda de λ = 1.5 m, la frecuencia f.",
+  fields: [
+    { label: "C =", unit: "m²/s²", ans: 900, tol: 0.01 },
+    { label: "f =", unit: "Hz", ans: 20, tol: 0.01 }
+  ],
+  exp: "<b>Paso 1.</b> El coeficiente de la ecuación es C = v² = F/μ = 90/0.10 = 900 m²/s².<br><b>Paso 2.</b> v = 30 m/s y f = v/λ = 30/1.5 = 20 Hz." },
+
+{ sec: 4, type: "mc", topic: "hipótesis de la ecuación de onda lineal (ángulos pequeños)",
+  q: "En la deducción de la ecuación de onda lineal para una cuerda, ¿qué suposición es indispensable?",
+  opts: [
+    "Los ángulos con la horizontal son pequeños, de modo que sen θ ≈ tan θ ≈ ∂y/∂x y la tensión es prácticamente constante.",
+    "La cuerda no tiene masa, para que la segunda ley de Newton no incluya inercia.",
+    "La frecuencia es constante, para que todos los puntos oscilen en fase.",
+    "La amplitud es mayor que la longitud de onda, para que el pulso sea visible."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> Se aplica la segunda ley de Newton a un pequeño segmento de cuerda de masa μΔx (la masa sí importa). Con ángulos pequeños, sen θ ≈ tan θ ≈ ∂y/∂x y la tensión F se toma constante; así se llega a ∂²y/∂x² = (μ/F) ∂²y/∂t² con v² = F/μ.<br><b>Por qué las otras no.</b> Sin masa no habría fuerza neta ni ecuación de movimiento. La frecuencia y la visibilidad del pulso no intervienen en la deducción." },
+
+{ sec: 4, type: "num", topic: "leer 1/v² en la ecuación de onda",
+  q: "Una cuerda cumple la ecuación<span class='formula'>∂²y/∂x² = 0.040 ∂²y/∂t² &nbsp; (SI)</span>Calcula la rapidez v de las ondas y, para una onda de λ = 3.0 m, su frecuencia f.",
+  fields: [
+    { label: "v =", unit: "m/s", ans: 5, tol: 0.02 },
+    { label: "f =", unit: "Hz", ans: 5 / 3, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> Comparando con ∂²y/∂x² = (1/v²) ∂²y/∂t²: 1/v² = 0.040, entonces v² = 25 y v = 5.0 m/s.<br><b>Paso 2.</b> f = v/λ = 5.0/3.0 ≈ 1.67 Hz.<br>Error típico: tomar v = 0.040 directamente, sin invertir ni sacar raíz." },
+
+{ sec: 4, type: "mc", topic: "hallar v a partir de una solución senoidal",
+  q: "La función y = 0.5 sen(4x − 12t) (SI) es solución de la ecuación de onda lineal ∂²y/∂x² = (1/v²) ∂²y/∂t². ¿Cuál es el valor de v?",
+  opts: ["3 m/s", "48 m/s", "1/3 m/s", "8 m/s"], ans: 0,
+  exp: "<b>Razonamiento.</b> Derivando: ∂²y/∂x² = −16y y ∂²y/∂t² = −144y. Sustituyendo: −16y = (1/v²)(−144y), luego v² = 144/16 = 9 y v = 3 m/s (equivale a ω/k = 12/4).<br><b>Por qué las otras no.</b> 48 sale de multiplicar k·ω; 1/3 de dividir k/ω (al revés); 8 de restar ω − k." },
+
+{ sec: 4, type: "num", topic: "despeje de k y λ desde el coeficiente de la ecuación",
+  q: "Una onda y = 0.20 sen(kx − 90t) (SI) satisface <span class='formula'>∂²y/∂t² = 225 ∂²y/∂x²</span>Calcula el número de onda k y la longitud de onda λ.",
+  fields: [
+    { label: "k =", unit: "rad/m", ans: 6, tol: 0.02 },
+    { label: "λ =", unit: "m", ans: 2 * Math.PI / 6, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> El coeficiente es v² = 225, así que v = 15 m/s.<br><b>Paso 2.</b> De v = ω/k se despeja k = ω/v = 90/15 = 6.0 rad/m.<br><b>Paso 3.</b> λ = 2π/k = 2π/6.0 ≈ 1.05 m." },
+
+{ sec: 4, type: "mc", topic: "verificar solución no senoidal de la ecuación de onda",
+  q: "La ecuación de onda lineal de cierta cuerda es<span class='formula'>∂²y/∂x² = (1/9) ∂²y/∂t² &nbsp; (SI)</span>¿Cuál de estas funciones la satisface?",
+  opts: [
+    "y = (x − 3t)³",
+    "y = (x − 9t)³",
+    "y = x³ − 3t³",
+    "y = (x − t/3)³"
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> Con y = (x − 3t)³: ∂²y/∂x² = 6(x − 3t) y ∂²y/∂t² = 54(x − 3t) = 9·6(x − 3t) ✓. Es de la forma f(x − vt) con v = 3 m/s (v² = 9).<br><b>Por qué las otras no.</b> (x − 9t)³ tiene v = 9 (v² = 81), no 3. En x³ − 3t³ resulta 6x en el lado izquierdo y −2t a la derecha: no coinciden. (x − t/3)³ tiene v = 1/3." },
+
+{ sec: 4, type: "num", topic: "valores de las segundas derivadas en un punto",
+  q: "Para la onda y = 0.10 sen(5x − 20t) (SI), calcula ∂²y/∂x² y ∂²y/∂t² en x = 0.30 m y t = 0.020 s (calculadora en radianes).",
+  fields: [
+    { label: "∂²y/∂x² =", unit: "m⁻¹", ans: -25 * 0.1 * Math.sin(1.1), tol: 0.03 },
+    { label: "∂²y/∂t² =", unit: "m/s²", ans: -400 * 0.1 * Math.sin(1.1), tol: 0.03 }
+  ],
+  exp: "<b>Paso 1.</b> Fase: 5(0.30) − 20(0.020) = 1.5 − 0.4 = 1.1 rad, y = 0.10 sen(1.1) ≈ 0.0891 m.<br><b>Paso 2.</b> Para una senoidal, ∂²y/∂x² = −k²y = −25(0.0891) ≈ −2.23.<br><b>Paso 3.</b> ∂²y/∂t² = −ω²y = −400(0.0891) ≈ −35.6.<br>Comprobación: el cociente (−35.6)/(−2.23) = 16 = v² con v = ω/k = 4 m/s ✓." },
+
+{ sec: 4, type: "mc", topic: "significado de los términos de la deducción",
+  q: "En la deducción de la ecuación de onda para un segmento de cuerda de longitud Δx (masa μΔx), la segunda ley de Newton se escribe ΣF<sub>y</sub> = μΔx (∂²y/∂t²). ¿Qué representa el lado derecho?",
+  opts: [
+    "La masa del segmento multiplicada por su aceleración transversal (vertical).",
+    "La energía cinética del segmento.",
+    "La tensión neta a lo largo de la cuerda.",
+    "La fuerza que ejerce la fuente sobre el extremo de la cuerda."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> ∂²y/∂t² es la aceleración vertical del segmento y μΔx su masa: el producto es ma<sub>y</sub>, el lado derecho de la segunda ley de Newton. El lado izquierdo, F[(∂y/∂x)<sub>B</sub> − (∂y/∂x)<sub>A</sub>], es la fuerza vertical neta debida a la diferencia de pendientes.<br><b>Por qué las otras no.</b> La energía cinética llevaría ½mv²; la tensión no tiene aceleraciones; y la fuente no aparece en la ecuación de un segmento interior." },
+
+{ sec: 4, type: "num", topic: "despeje inverso: v y F desde el coeficiente",
+  q: "Una cuerda de μ = 0.050 kg/m satisface<span class='formula'>∂²y/∂x² = 4.0×10⁻⁴ ∂²y/∂t² &nbsp; (SI)</span>Calcula la rapidez v de las ondas y la tensión F de la cuerda.",
+  fields: [
+    { label: "v =", unit: "m/s", ans: 50, tol: 0.02 },
+    { label: "F =", unit: "N", ans: 125, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> 1/v² = 4.0×10⁻⁴, entonces v² = 2500 y v = 50 m/s.<br><b>Paso 2.</b> De v² = F/μ se despeja F = μv² = 0.050·2500 = 125 N." },
+
+{ sec: 4, type: "mc", topic: "ordenar rapideces desde el coeficiente de cada ecuación",
+  q: "Cada ecuación describe ondas en una cuerda distinta (SI). Ordena de mayor a menor la rapidez de las ondas:<span class='formula'>I) ∂²y/∂x² = 0.010 ∂²y/∂t² &nbsp;&nbsp; II) ∂²y/∂x² = 0.25 ∂²y/∂t²<br>III) ∂²y/∂t² = 36 ∂²y/∂x² &nbsp;&nbsp; IV) ∂²y/∂x² = 4.0 ∂²y/∂t²</span>",
+  opts: ["I > III > II > IV", "IV > II > III > I", "III > I > II > IV", "I > II > III > IV"], ans: 0,
+  exp: "<b>Razonamiento.</b> Se lleva cada una a la forma estándar. I: 1/v² = 0.010 → v = 10 m/s. II: 1/v² = 0.25 → v = 2 m/s. III: v² = 36 → v = 6 m/s. IV: 1/v² = 4.0 → v = 0.5 m/s. Orden: I > III > II > IV.<br><b>Por qué las otras no.</b> Ordenar por el valor del coeficiente sin distinguir si multiplica a ∂²y/∂x² o a ∂²y/∂t² invierte el orden (o mezcla los casos)." },
+
+{ sec: 4, type: "mc", topic: "linealidad de la ecuación y superposición de soluciones",
+  q: "Dos funciones (SI), y<sub>1</sub> = sen(2x − 6t) y y<sub>2</sub> = 0.5 sen(5x + 15t), son soluciones de la ecuación de onda lineal con v = 3 m/s. ¿Cuál afirmación sobre combinaciones de ellas es correcta?",
+  opts: [
+    "y<sub>1</sub> + y<sub>2</sub> y 3y<sub>1</sub> también son soluciones, porque la ecuación es lineal.",
+    "Solo y<sub>1</sub> y y<sub>2</sub> son soluciones; la suma no lo es.",
+    "El producto y<sub>1</sub>·y<sub>2</sub> también es solución.",
+    "y<sub>1</sub>² + y<sub>2</sub>² es solución, porque suma dos soluciones."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> Las derivadas de una suma son la suma de las derivadas, y los múltiplos constantes salen de la derivada. Por eso, si y<sub>1</sub> y y<sub>2</sub> cumplen la ecuación, también y<sub>1</sub> + y<sub>2</sub> y cualquier múltiplo. Esto es la base del principio de superposición. (Comprobación: 6/2 = 3 y 15/5 = 3.)<br><b>Por qué las otras no.</b> Productos y cuadrados no son combinaciones lineales; sus derivadas segundas generan términos cruzados que rompen la igualdad." },
+
+{ sec: 4, type: "mc", topic: "ondas en dos cuerdas unidas: coeficiente 1/v² en cada una",
+  q: "Una cuerda liviana (μ₁) está unida a una más pesada (μ₂ > μ₁), ambas con la misma tensión F. La ecuación de onda se cumple por separado en cada cuerda. ¿Cómo se comparan los coeficientes 1/v² de ambas ecuaciones?",
+  opts: [
+    "El coeficiente es mayor en la cuerda pesada, porque su rapidez es menor.",
+    "El coeficiente es mayor en la cuerda liviana, porque su rapidez es menor.",
+    "Son iguales, porque la tensión es la misma.",
+    "Son iguales, porque la ecuación de onda no depende del medio."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> En cada cuerda, 1/v² = μ/F. Con F igual, el coeficiente crece con μ: es mayor en la cuerda pesada, donde v es menor.<br><b>Por qué las otras no.</b> La liviana tiene mayor v, o sea menor 1/v². Que la tensión sea la misma no basta para igualar los coeficientes: μ también interviene, y la ecuación sí depende del medio a través de v." },
+
+{ sec: 4, type: "mc", topic: "qué pasa si se duplica la tensión: coeficiente de la ecuación",
+  q: "En la ecuación ∂²y/∂x² = (μ/F) ∂²y/∂t² se duplica la tensión de la cuerda sin cambiar nada más. ¿Qué ocurre con el coeficiente μ/F = 1/v²?",
+  opts: [
+    "Se reduce a la mitad.",
+    "Se duplica.",
+    "Se reduce a la cuarta parte.",
+    "No cambia."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> μ/F con F duplicada es la mitad del valor inicial. Además v² = F/μ se duplica (v aumenta en √2), de modo que 1/v² se reduce a la mitad.<br><b>Por qué las otras no.</b> «Se duplica» invierte la relación. «Cuarta parte» confunde 1/v² con 1/v⁴. «No cambia» ignora que F aparece en el denominador." },
+
+{ sec: 4, type: "mc", topic: "comprobar si una función propuesta es solución para una cuerda dada",
+  q: "Un estudiante propone que y = 2 sen(3x − 6t) (SI) describe las ondas en una cuerda de μ = 0.50 kg/m sometida a F = 18 N. ¿Es correcto?",
+  opts: [
+    "No: ω/k = 2 m/s, pero la cuerda exige v = √(F/μ) = 6 m/s; para k = 3 rad/m debería ser ω = 18 rad/s.",
+    "Sí: es una senoidal de la forma A sen(kx − ωt), y eso basta.",
+    "No: debería usarse coseno en lugar de seno.",
+    "Sí: k·ω = 18, que coincide con la tensión F = 18 N."
+  ], ans: 0,
+  exp: "<b>Razonamiento.</b> La cuerda impone v² = F/μ = 18/0.50 = 36, así que v = 6 m/s. Una senoidal solo es solución si ω/k = v. Aquí ω/k = 6/3 = 2 m/s ≠ 6 m/s. Para ser solución con k = 3 rad/m se necesitaría ω = vk = 18 rad/s.<br><b>Por qué las otras no.</b> No basta la forma senoidal: hay que verificar ω/k = v. El seno y el coseno son equivalentes (difieren en la fase). La coincidencia kω = 18 es casual y no tiene significado físico." },
+
+{ sec: 4, type: "num", topic: "despeje encadenado: v desde el coeficiente, luego k y ω",
+  q: "Las ondas en una cuerda cumplen<span class='formula'>∂²y/∂t² = 400 ∂²y/∂x² &nbsp; (SI)</span>Para una onda de longitud de onda λ = 0.40 m, calcula el número de onda k y la frecuencia angular ω.",
+  fields: [
+    { label: "k =", unit: "rad/m", ans: 2 * Math.PI / 0.4, tol: 0.02 },
+    { label: "ω =", unit: "rad/s", ans: 20 * 2 * Math.PI / 0.4, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> El coeficiente es v² = 400, entonces v = 20 m/s.<br><b>Paso 2.</b> k = 2π/λ = 2π/0.40 ≈ 15.7 rad/m.<br><b>Paso 3.</b> ω = vk = 20·15.71 ≈ 314 rad/s (equivale a ω = 2πf con f = v/λ = 50 Hz)." },
+
+{ sec: 4, type: "mc", topic: "análisis de unidades del coeficiente 1/v²",
+  q: "En la ecuación de onda ∂²y/∂x² = (1/v²) ∂²y/∂t², con x en metros, y en metros y t en segundos, ¿cuál es la unidad SI del coeficiente 1/v²?",
+  opts: ["s²/m²", "m²/s²", "s/m", "m/s²"], ans: 0,
+  exp: "<b>Razonamiento.</b> Como v tiene unidades de m/s, v² tiene m²/s² y 1/v² tiene s²/m². Comprobación dimensional: ∂²y/∂x² [m/m² = 1/m] y (1/v²)∂²y/∂t² [(s²/m²)(m/s²) = 1/m] ✓.<br><b>Por qué las otras no.</b> m²/s² es v², no 1/v². s/m sería 1/v (sin cuadrado). m/s² es una aceleración." },
+
+{ sec: 4, type: "num", topic: "validez de sen θ ≈ tan θ: ángulo máximo",
+  q: "Para que la aproximación sen θ ≈ tan θ tenga un error relativo (tan θ − sen θ)/tan θ menor que 1 %, ¿cuál es el ángulo máximo θ (en grados)?",
+  fields: [{ label: "θ<sub>máx</sub> =", unit: "°", ans: Math.acos(0.99) * 180 / Math.PI, tol: 0.02 }],
+  exp: "<b>Paso 1.</b> (tan θ − sen θ)/tan θ = 1 − cos θ.<br><b>Paso 2.</b> Se exige 1 − cos θ < 0.01, o sea cos θ > 0.99.<br><b>Paso 3.</b> θ < arccos(0.99) ≈ 8.1°.<br>Esta es la razón de la hipótesis de «ángulos pequeños» en la deducción de la ecuación de onda." },
+
+{ sec: 4, type: "num", topic: "comprobar la hipótesis de ángulos pequeños en una onda dada",
+  q: "Una onda y = 0.020 sen(4x − 30t) (SI) recorre una cuerda. La pendiente de la cuerda es ∂y/∂x = tan θ. Calcula la pendiente máxima y el ángulo máximo θ con la horizontal, en grados.",
+  fields: [
+    { label: "pendiente máx. =", unit: "", ans: 0.08, tol: 0.02 },
+    { label: "θ<sub>máx</sub> =", unit: "°", ans: Math.atan(0.08) * 180 / Math.PI, tol: 0.02 }
+  ],
+  exp: "<b>Paso 1.</b> ∂y/∂x = kA cos(4x − 30t) = 0.080 cos(4x − 30t); su valor máximo es kA = 4·0.020 = 0.080.<br><b>Paso 2.</b> θ<sub>máx</sub> = arctan(0.080) ≈ 4.6°.<br>Como 4.6° es menor que ≈ 8° (límite del 1 % de error), sen θ ≈ tan θ se cumple bien y la ecuación de onda lineal describe correctamente esta onda." }
+
+];
+
+(function () {
+  "use strict";
+
+  /* ============================ CONFIGURACIÓN ============================ */
+  var EXAM_SIZE = 20;                        // preguntas por examen
+  var K_SEEN = "ondas_seen_v1";              // ids ya usados por sección
+  var K_EXAM = "ondas_exam_v1";              // examen en curso (pausa/reanudar)
+  var K_LAST = "ondas_last_v1";              // último examen terminado
+
+  var $ = function (id) { return document.getElementById(id); };
+  var cover = $("cover"), quiz = $("quiz"), results = $("results");
+  var ex = null;                             // examen activo
+
+  /* ---------- Almacenamiento (si el navegador lo bloquea, usa memoria) ---------- */
+  var mem = {};
+  function sget(k) {
+    try { var v = window.localStorage.getItem(k); if (v) { return JSON.parse(v); } } catch (e) { /* sin acceso */ }
+    return mem[k] || null;
+  }
+  function sset(k, v) {
+    mem[k] = v;
+    try { window.localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* sin acceso */ }
+  }
+  function sdel(k) {
+    delete mem[k];
+    try { window.localStorage.removeItem(k); } catch (e) { /* sin acceso */ }
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function shuffle(a) {
+    var r = a.slice();
+    for (var i = r.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = r[i]; r[i] = r[j]; r[j] = t;
+    }
+    return r;
+  }
+
+  /* ============================ SELECCIÓN DEL EXAMEN ============================
+     Reparte las 20 preguntas en partes casi iguales entre las 5 secciones (4 por
+     sección) para que todo el temario quede cubierto. Dentro de cada sección se
+     recorre el banco sin repetir hasta agotarlo; luego empieza un ciclo nuevo
+     (repetición controlada). Al final se mezcla el orden. */
+  function idsBySection() {
+    var g = SECTIONS.map(function () { return []; });
+    BANK.forEach(function (q, i) { g[q.sec].push(i); });
+    return g;
+  }
+
+  function pickExam() {
+    var groups = idsBySection();
+    var seen = sget(K_SEEN) || {};
+    var n = SECTIONS.length;
+    var base = Math.floor(EXAM_SIZE / n), extra = EXAM_SIZE - base * n;
+    var order = shuffle(SECTIONS.map(function (_, i) { return i; }));
+    var extraSecs = order.slice(0, extra);
+    var picked = [];
+
+    groups.forEach(function (ids, s) {
+      var quota = Math.min(base + (extraSecs.indexOf(s) >= 0 ? 1 : 0), ids.length);
+      var used = (seen[s] || []).filter(function (id) { return ids.indexOf(id) >= 0; });
+      var fresh = shuffle(ids.filter(function (id) { return used.indexOf(id) < 0; }));
+      var chosen;
+      if (fresh.length >= quota) {
+        chosen = fresh.slice(0, quota);
+        used = used.concat(chosen);
+      } else {                                   // ciclo agotado: repetición controlada
+        var rest = shuffle(ids.filter(function (id) { return fresh.indexOf(id) < 0; }));
+        chosen = fresh.concat(rest.slice(0, quota - fresh.length));
+        used = chosen.slice();                   // arranca un ciclo nuevo
+      }
+      seen[s] = used;
+      picked = picked.concat(chosen);
+    });
+
+    if (picked.length < EXAM_SIZE) {             // secciones con pocas preguntas: completar
+      var others = shuffle(BANK.map(function (_, i) { return i; }).filter(function (i) { return picked.indexOf(i) < 0; }));
+      picked = picked.concat(others.slice(0, EXAM_SIZE - picked.length));
+    }
+    sset(K_SEEN, seen);
+    return shuffle(picked);
+  }
+
+  function makeExam(mode) {
+    var ids = pickExam();
+    return {
+      ids: ids,
+      mode: mode,
+      cur: 0,
+      finished: false,
+      answers: ids.map(function (id) {
+        var q = BANK[id];
+        return q.type === "mc" ? null : q.fields.map(function () { return ""; });
+      }),
+      order: ids.map(function (id) {          // orden barajado de opciones (índices originales)
+        var q = BANK[id];
+        return q.type === "mc" ? shuffle(q.opts.map(function (_, i) { return i; })) : null;
+      })
+    };
+  }
+
+  function validExam(e) {
+    if (!e || !e.ids || !e.answers || !e.order || e.ids.length < 1) { return false; }
+    for (var k = 0; k < e.ids.length; k++) {
+      var q = BANK[e.ids[k]];
+      if (!q) { return false; }
+      var a = e.answers[k];
+      if (q.type === "mc") {
+        if (!(a === null || typeof a === "number") || !e.order[k] || e.order[k].length !== q.opts.length) { return false; }
+      } else if (!a || a.length !== q.fields.length) { return false; }
+    }
+    return typeof e.cur === "number" && e.cur >= 0 && e.cur < e.ids.length;
+  }
+
+  /* ============================ CORRECCIÓN ============================ */
+  function parseNum(s) {
+    if (s === null || s === undefined) { return NaN; }
+    s = String(s).trim().replace(/\u2212/g, "-").replace(",", ".").replace(/\s+/g, "");
+    if (!/^[-+]?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?$/i.test(s)) { return NaN; }
+    return parseFloat(s);
+  }
+  function fieldOk(f, raw) {
+    var v = parseNum(raw);
+    if (!isFinite(v)) { return false; }
+    var tolAbs = Math.abs(f.ans) * (f.tol || 0.02);
+    if (f.abs) { tolAbs = Math.max(tolAbs, f.abs); }
+    if (f.ans === 0 && !f.abs) { tolAbs = 0.01; }
+    return Math.abs(v - f.ans) <= tolAbs;
+  }
+  function qOf(e, k) { return BANK[e.ids[k]]; }
+  function isCorrect(e, k) {
+    var q = qOf(e, k), a = e.answers[k];
+    if (q.type === "mc") { return a === q.ans; }
+    return q.fields.every(function (f, i) { return fieldOk(f, a[i]); });
+  }
+  function isAnswered(e, k) {
+    var q = qOf(e, k), a = e.answers[k];
+    if (q.type === "mc") { return a !== null; }
+    return a.every(function (x) { return isFinite(parseNum(x)); });
+  }
+  function fmt(x) {
+    return String(parseFloat(Number(x).toPrecision(4))).replace(".", ",");
+  }
+
+  /* ============================ PORTADA ============================ */
+  function currentMode() {
+    var r = document.querySelector("input[name=mode]:checked");
+    return r ? r.value : "exam";
+  }
+
+  function showCover() {
+    quiz.classList.add("hidden");
+    results.classList.add("hidden");
+    cover.classList.remove("hidden");
+    var saved = sget(K_EXAM);
+    var canResume = validExam(saved);
+    $("resumeBtn").classList.toggle("hidden", !canResume);
+    if (canResume) {
+      $("resumeBtn").textContent = "Continuar examen (pregunta " + (saved.cur + 1) + " de " + saved.ids.length + ")";
+    }
+    var last = sget(K_LAST);
+    $("reviewBtn").classList.toggle("hidden", !(last && last.finished && validExam(fixLast(last))));
+    window.scrollTo(0, 0);
+    $("startBtn").focus();
+  }
+  function fixLast(l) {        // el último examen guarda cur en el final; lo normalizamos para validar
+    if (l && l.ids && (l.cur >= l.ids.length || l.cur < 0)) { l.cur = 0; }
+    return l;
+  }
+
+  /* ============================ PREGUNTAS ============================ */
+  function start(mode) {
+    ex = makeExam(mode || currentMode());
+    sset(K_EXAM, ex);
+    openQuiz();
+  }
+  function resume() {
+    var saved = sget(K_EXAM);
+    if (!validExam(saved)) { start(); return; }
+    ex = saved;
+    openQuiz();
+  }
+  function openQuiz() {
+    cover.classList.add("hidden");
+    results.classList.add("hidden");
+    results.innerHTML = "";
+    quiz.classList.remove("hidden");
+    $("barWrap").setAttribute("aria-valuemax", String(ex.ids.length));
+    $("modeBadge").textContent = ex.mode === "practice" ? "Modo práctica" : "Modo examen";
+    renderQuestion();
+  }
+
+  function renderQuestion() {
+    var k = ex.cur, q = qOf(ex, k), N = ex.ids.length;
+    $("progText").textContent = "Pregunta " + (k + 1) + " de " + N;
+    $("secText").textContent = "Sección " + (q.sec + 1) + " de " + SECTIONS.length;
+    $("barFill").style.width = ((k + 1) / N * 100) + "%";
+    $("barWrap").setAttribute("aria-valuenow", String(k + 1));
+    $("barWrap").setAttribute("aria-label", "Pregunta " + (k + 1) + " de " + N);
+
+    var html = "<div class='sec-name' id='secName'>" + esc(SECTIONS[q.sec]) + "</div>";
+    html += "<p class='qtext' id='qtitle' tabindex='-1'>" + q.q + "</p>";
+
+    if (q.type === "mc") {
+      html += "<div class='opts' role='radiogroup' aria-labelledby='qtitle'>";
+      ex.order[k].forEach(function (oi) {
+        var sel = ex.answers[k] === oi;
+        html += "<label class='opt" + (sel ? " sel" : "") + "'>" +
+                "<input type='radio' name='q" + k + "' value='" + oi + "'" + (sel ? " checked" : "") + ">" +
+                "<span>" + q.opts[oi] + "</span></label>";
+      });
+      html += "</div>";
+    } else {
+      var signed = q.fields.some(function (f) { return f.ans < 0; });
+      html += "<div class='fields'>";
+      q.fields.forEach(function (f, i) {
+        var val = esc(ex.answers[k][i]);
+        html += "<div class='field'><label for='f" + i + "'>" + f.label + "</label>" +
+                "<input id='f" + i + "' data-k='" + i + "' type='text' inputmode='" + (signed ? "text" : "decimal") + "' autocomplete='off' aria-describedby='numHint' value=\"" + val + "\">" +
+                (f.unit ? "<span class='unit'>" + f.unit + "</span>" : "") + "</div>";
+      });
+      html += "</div><p class='hint' id='numHint'>Escribe solo el número (punto o coma decimal). Se acepta un margen pequeño por redondeo.</p>";
+    }
+
+    if (ex.mode === "practice") {
+      html += "<details class='sheet'><summary>Hoja de fórmulas de esta sección</summary>";
+      SHEETS[q.sec].forEach(function (line) { html += "<span class='formula'>" + line + "</span>"; });
+      html += "</details>";
+    }
+    $("qcard").innerHTML = html;
+
+    if (q.type === "mc") {
+      var radios = $("qcard").querySelectorAll("input[type=radio]");
+      Array.prototype.forEach.call(radios, function (r) {
+        r.addEventListener("change", function () {
+          ex.answers[k] = parseInt(r.value, 10);
+          Array.prototype.forEach.call($("qcard").querySelectorAll(".opt"), function (l) {
+            l.classList.toggle("sel", l.querySelector("input").checked);
+          });
+          persist();
+          updateNav();
+        });
+      });
+    } else {
+      var inputs = $("qcard").querySelectorAll("input[type=text]");
+      Array.prototype.forEach.call(inputs, function (inp) {
+        inp.addEventListener("input", function () {
+          ex.answers[k][parseInt(inp.getAttribute("data-k"), 10)] = inp.value;
+          persist();
+          updateNav();
+        });
+        inp.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" && isAnswered(ex, ex.cur)) { e.preventDefault(); next(); }
+        });
+      });
+    }
+    updateNav();
+    $("srStatus").textContent = "Pregunta " + (k + 1) + " de " + N + ". " + SECTIONS[q.sec] + ".";
+    window.scrollTo(0, 0);
+    $("qtitle").focus();
+  }
+
+  function persist() { if (ex && !ex.finished) { sset(K_EXAM, ex); } }
+
+  function updateNav() {
+    var N = ex.ids.length;
+    $("prevBtn").disabled = ex.cur === 0;
+    $("prevBtn").style.visibility = ex.cur === 0 ? "hidden" : "visible";
+    $("nextBtn").textContent = ex.cur === N - 1 ? "Ver resultados" : "Siguiente";
+    $("nextBtn").disabled = !isAnswered(ex, ex.cur);
+  }
+
+  function next() {
+    if (!isAnswered(ex, ex.cur)) { return; }
+    if (ex.cur === ex.ids.length - 1) { finish(); return; }
+    ex.cur++;
+    persist();
+    renderQuestion();
+  }
+  function prev() {
+    if (ex.cur > 0) { ex.cur--; persist(); renderQuestion(); }
+  }
+  function pause() {
+    persist();
+    showCover();
+  }
+
+  /* ============================ RESULTADOS ============================ */
+  function scoreFrom(pct) {
+    if (pct >= 0.9) { return 5; }
+    if (pct >= 0.75) { return 4; }
+    if (pct >= 0.55) { return 3; }
+    if (pct >= 0.35) { return 2; }
+    return 1;
+  }
+  var LABELS = {
+    5: "Excelente: dominas el tema.",
+    4: "Muy bien: solo te faltan detalles.",
+    3: "Aceptable: hay huecos que conviene repasar.",
+    2: "Necesitas repasar varios temas.",
+    1: "Empieza por revisar los conceptos base."
+  };
+
+  function finish() {
+    ex.finished = true;
+    sset(K_LAST, ex);
+    sdel(K_EXAM);
+    showResults(ex);
+  }
+
+  function answerBlock(e, k, good) {
+    var q = qOf(e, k), a = e.answers[k], h = "<div class='ans-row'>";
+    if (q.type === "mc") {
+      if (!good) { h += "<div class='yours'><b>Tu respuesta:</b> " + q.opts[a] + "</div>"; }
+      h += "<div class='right'><b>" + (good ? "Tu respuesta (correcta):" : "Correcta:") + "</b> " + q.opts[q.ans] + "</div>";
+    } else {
+      q.fields.forEach(function (f, i) {
+        var ok = fieldOk(f, a[i]);
+        h += "<div class='" + (ok ? "right" : "yours") + "'>" + f.label + " <b>" + esc(String(a[i]).trim()) + "</b> " + f.unit +
+             (ok ? " (bien)" : " &nbsp;→&nbsp; correcto ≈ <b>" + fmt(f.ans) + "</b> " + f.unit) + "</div>";
+      });
+    }
+    return h + "</div>";
+  }
+
+  function fbBlock(e, k, good) {
+    var q = qOf(e, k);
+    return "<div class='fb'><span class='tag" + (good ? " ok" : "") + "'>Sección " + (q.sec + 1) + " · " + esc(q.topic) + "</span>" +
+           "<h3>Pregunta " + (k + 1) + "</h3><p class='qtext' style='font-size:1rem;margin:0 0 6px'>" + q.q + "</p>" +
+           answerBlock(e, k, good) + "<div class='exp'>" + q.exp + "</div></div>";
+  }
+
+  function showResults(e) {
+    ex = e;
+    cover.classList.add("hidden");
+    quiz.classList.add("hidden");
+    results.classList.remove("hidden");
+
+    var N = e.ids.length, ok = [], bad = [];
+    var perSec = SECTIONS.map(function () { return { ok: 0, n: 0 }; });
+    for (var k = 0; k < N; k++) {
+      var c = isCorrect(e, k), sec = qOf(e, k).sec;
+      (c ? ok : bad).push(k);
+      perSec[sec].n++;
+      if (c) { perSec[sec].ok++; }
+    }
+    var pct = ok.length / N;
+    var score = scoreFrom(pct);
+
+    var html = "<div class='card score-card'>" +
+      "<h2 id='resTitle' tabindex='-1' class='muted' style='font-size:1rem;font-family:var(--sans);font-weight:400'>Tu puntuación · " + (e.mode === "practice" ? "modo práctica" : "modo examen") + "</h2>" +
+      "<div class='score-num' aria-label='Nota " + score + " de 5'>" + score + "<small> / 5</small></div>" +
+      "<div class='score-label'>" + LABELS[score] + "</div>" +
+      "<div class='muted'>" + ok.length + " de " + N + " respuestas correctas (" + Math.round(pct * 100) + "%)</div>" +
+      "<div class='secs'>";
+    SECTIONS.forEach(function (s, i) {
+      if (!perSec[i].n) { return; }
+      var p = perSec[i].ok / perSec[i].n * 100;
+      html += "<div class='sec-row'><div class='top'><span>" + esc(s) + "</span><span>" + perSec[i].ok + "/" + perSec[i].n + " aciertos</span></div>" +
+              "<div class='bar' role='img' aria-label='" + perSec[i].ok + " de " + perSec[i].n + "'><i style='width:" + p + "%'></i></div></div>";
+    });
+    html += "</div></div>";
+
+    if (bad.length === 0) {
+      html += "<div class='allgood'>No fallaste ninguna pregunta. No hay temas huecos.</div>";
+    } else {
+      var seen = {}, topics = [];
+      bad.forEach(function (k) {
+        var t = qOf(e, k).topic;
+        if (!seen[t]) { seen[t] = 1; topics.push(t); }
+      });
+      html += "<div class='card'><h2 style='font-size:1.3rem'>Temas huecos</h2>" +
+              "<p class='muted' style='margin:6px 0 0'>Fallaste en:</p><ul class='gaps'>";
+      topics.forEach(function (t) { html += "<li>" + esc(t) + "</li>"; });
+      html += "</ul></div>";
+
+      html += "<h2 style='font-size:1.3rem;margin:26px 0 4px'>Retroalimentación de las preguntas falladas</h2>";
+      bad.forEach(function (k) { html += fbBlock(e, k, false); });
+    }
+
+    if (ok.length) {
+      html += "<details class='okbox'><summary>Revisar también las " + ok.length + " preguntas acertadas</summary>";
+      ok.forEach(function (k) { html += fbBlock(e, k, true); });
+      html += "</details>";
+    }
+
+    html += "<div class='retry'>" +
+            "<button class='btn big' id='retryBtn' type='button'>Reintentar con un examen nuevo</button>" +
+            "<button class='btn ghost big' id='homeBtn' type='button'>Volver al inicio</button></div>";
+    results.innerHTML = html;
+    $("retryBtn").addEventListener("click", function () { start(e.mode); });
+    $("homeBtn").addEventListener("click", showCover);
+    window.scrollTo(0, 0);
+    $("resTitle").focus();
+  }
+
+  function reviewLast() {
+    var last = fixLast(sget(K_LAST));
+    if (last && validExam(last)) { showResults(last); }
+  }
+
+  /* ============================ EVENTOS ============================ */
+  $("startBtn").addEventListener("click", function () { start(); });
+  $("resumeBtn").addEventListener("click", resume);
+  $("reviewBtn").addEventListener("click", reviewLast);
+  $("nextBtn").addEventListener("click", next);
+  $("prevBtn").addEventListener("click", prev);
+  $("pauseBtn").addEventListener("click", pause);
+
+  Array.prototype.forEach.call(document.querySelectorAll("input[name=mode]"), function (r) {
+    r.addEventListener("change", function () {
+      $("modeLabelExam").classList.toggle("sel", currentMode() === "exam");
+      $("modeLabelPractice").classList.toggle("sel", currentMode() === "practice");
+    });
+  });
+
+  showCover();
+})();
