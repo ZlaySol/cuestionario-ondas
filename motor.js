@@ -15,30 +15,6 @@ var SHEETS = [
   ["∂²y/∂x² = (1/v²) ∂²y/∂t² &nbsp;&nbsp; (μ/F) ∂²y/∂t² = ∂²y/∂x² &nbsp;&nbsp; v² = F/μ", "ΣF<sub>y</sub> = μΔx (∂²y/∂t²) &nbsp;&nbsp; Ángulos pequeños: sen θ ≈ tan θ ≈ ∂y/∂x"]
 ];
 
-/* =====================================================================
-     BANCO DE PREGUNTAS  (edita aquí para ampliar)
-     ---------------------------------------------------------------------
-     Cómo añadir una pregunta: copia un objeto y agrégalo AL FINAL del array
-     BANK (no reordenes las existentes: el progreso guardado usa la posición).
-
-     Campos comunes
-       sec   : 0..4  (índice en SECTIONS)
-       type  : "mc" (opción múltiple) | "num" (numérica)
-       topic : tema corto; se lista en "Temas huecos" si se falla
-       q     : enunciado (HTML simple: <sub>, <sup>, <b>, <span class='formula'>)
-       exp   : explicación pedagógica (paso a paso + por qué fallan las otras).
-               En "mc" NO cites las opciones por letra: se barajan; cítalas por su contenido.
-
-     Solo "mc"
-       opts  : 4 textos; ans = índice (0..3) de la correcta DENTRO de opts.
-               El examen baraja el orden al mostrarlas, la lógica no se rompe.
-
-     Solo "num"
-       fields: [{ label, unit, ans, tol }]
-               tol = error relativo permitido (0.02 = 2 %). Opcional abs = error
-               absoluto mínimo permitido (útil si ans es cercano a 0).
-               Acepta coma o punto decimal y notación 2.5e-4.
-     ===================================================================== */
 var BANK = [
 
 /* ===================== SECCIÓN 1 · Conceptos fundamentales ===================== */
@@ -878,7 +854,6 @@ var BANK = [
   var cover = $("cover"), quiz = $("quiz"), results = $("results");
   var ex = null;                             // examen activo
 
-  /* ---------- Almacenamiento (si el navegador lo bloquea, usa memoria) ---------- */
   var mem = {};
   function sget(k) {
     try { var v = window.localStorage.getItem(k); if (v) { return JSON.parse(v); } } catch (e) { /* sin acceso */ }
@@ -906,11 +881,6 @@ var BANK = [
     return r;
   }
 
-  /* ============================ SELECCIÓN DEL EXAMEN ============================
-     Reparte las 20 preguntas en partes casi iguales entre las 5 secciones (4 por
-     sección) para que todo el temario quede cubierto. Dentro de cada sección se
-     recorre el banco sin repetir hasta agotarlo; luego empieza un ciclo nuevo
-     (repetición controlada). Al final se mezcla el orden. */
   function idsBySection() {
     var g = SECTIONS.map(function () { return []; });
     BANK.forEach(function (q, i) { g[q.sec].push(i); });
@@ -1284,9 +1254,7 @@ var BANK = [
     });
   });
 
-  /* ============================ TEMA CLARO / OSCURO ============================
-     El tema se guarda en localStorage ("ondas_theme_v1"). La clase real vive en
-     <html data-theme="light|dark">; los colores están en estilo.css. */
+  /* ============================ TEMA CLARO / OSCURO ============================*/
   var K_THEME = "ondas_theme_v1";
   function applyTheme(t) {
     document.documentElement.setAttribute("data-theme", t);
@@ -1303,7 +1271,6 @@ var BANK = [
     applyTheme(t);
     try { window.localStorage.setItem(K_THEME, t); } catch (e) { /* sin acceso */ }
   }
-  /* Si el botón no está en index.html (por ejemplo, un index.html antiguo), se crea aquí */
   if (!$("themeBtn")) {
     var bar = document.createElement("div");
     bar.className = "topbar";
