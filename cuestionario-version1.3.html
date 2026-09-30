@@ -6,18 +6,18 @@
 <title>Generador de exámenes · Movimiento Ondulatorio</title>
 <style>
   :root {
-    --bg: #eaf1f5;
-    --surface: #ffffff;
-    --ink: #1b2b34;
-    --muted: #5b6b75;
-    --line: #d3e0e7;
-    --primary: #2b7a8c;
-    --primary-dark: #1f5c6a;
-    --primary-soft: #d9edf1;
-    --ok: #2e7d55;
-    --ok-soft: #dff2e7;
-    --bad: #b8433a;
-    --bad-soft: #fbe6e3;
+    --bg: #01141f;
+    --surface: #191919;
+    --ink: #4287aa;
+    --muted: #4287aa;
+    --line: #43b0eb;
+    --primary: #1ac8ef;
+    --primary-dark: #118da9;
+    --primary-soft: #91d7ed;
+    --ok: #0cc04b;
+    --ok-soft: #0cc04b;
+    --bad: #e52416;
+    --bad-soft: #e92c1e;
     --radius: 14px;
     --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
     --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -62,13 +62,13 @@
   .actions { display: flex; flex-direction: column; align-items: center; gap: 12px; }
   .btn {
     border: 0; border-radius: 12px; padding: 13px 26px; font-weight: 600; font-size: 1rem;
-    background: var(--primary); color: #fff; transition: background .15s, transform .05s;
+    background: var(--primary); color: #ffffff; transition: background .15s, transform .05s;
   }
   .btn:hover { background: var(--primary-dark); }
   .btn:active { transform: translateY(1px); }
   .btn.ghost { background: transparent; color: var(--primary-dark); border: 1.5px solid var(--primary); }
   .btn.ghost:hover { background: var(--primary-soft); }
-  .btn[disabled] { background: #b9c9d0; cursor: not-allowed; }
+  .btn[disabled] { background: #35b6d3; cursor: not-allowed; }
   .btn.ghost[disabled] { background: transparent; color: #8aa0a9; border-color: #b9c9d0; }
   .btn.big { padding: 16px 40px; font-size: 1.1rem; }
   .btn.small { padding: 8px 16px; font-size: .92rem; }
@@ -84,7 +84,7 @@
   .sec-name { font-size: .95rem; color: var(--primary-dark); font-weight: 600; margin-bottom: 10px; }
   .qtext { font-size: 1.12rem; margin: 0 0 18px; }
   .qtext sub, .qtext sup, .opt sub, .opt sup, .exp sub, .exp sup, .field label sub, .formula sub, .formula sup { font-size: .75em; line-height: 0; }
-  .formula { display: block; margin: 8px 0; padding: 8px 12px; background: #f3f8fa; border-radius: 8px; font-family: var(--serif); font-size: 1.05rem; overflow-x: auto; }
+  .formula { display: block; margin: 8px 0; padding: 8px 12px; background: #3c94b7; border-radius: 8px; font-family: var(--serif); font-size: 1.05rem; overflow-x: auto; color: #01141f;}
 
   .opts { display: grid; gap: 10px; }
   .opt { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 12px; cursor: pointer; background: #fff; }
@@ -109,24 +109,24 @@
 
   /* Resultados */
   .score-card { text-align: center; }
-  .score-num { font-family: var(--serif); font-size: 4.5rem; line-height: 1; color: var(--primary-dark); }
-  .score-num small { font-size: 1.6rem; color: var(--muted); }
+  .score-num { font-family: var(--serif); font-size: 4.5rem; line-height: 1; color: #fff; }
+  .score-num small { font-size: 1.6rem; color: #d1d0d0; }
   .score-label { font-size: 1.2rem; margin: 6px 0 4px; font-weight: 600; }
-  .muted { color: var(--muted); }
-  .secs { display: grid; gap: 12px; margin-top: 20px; text-align: left; }
+  .muted { color: #10a3d8; }
+  .secs { display: grid; gap: 12px; margin-top: 20px; text-align: left;}
   .sec-row .top { display: flex; justify-content: space-between; gap: 10px; font-size: .95rem; margin-bottom: 4px; }
   .sec-row .bar { height: 8px; }
-  .sec-row .bar > i { background: var(--primary); }
-  .gaps { margin: 10px 0 0; padding-left: 1.2em; }
-  .gaps li { margin: 4px 0; }
-  .fb { border-radius: 12px; border: 1px solid var(--line); padding: 16px; margin-top: 14px; background: #fff; }
-  .fb h3 { font-size: 1.02rem; margin-bottom: 8px; }
-  .tag { display: inline-block; font-size: .82rem; padding: 2px 10px; border-radius: 999px; background: var(--bad-soft); color: var(--bad); margin-bottom: 8px; }
-  .tag.ok { background: var(--ok-soft); color: var(--ok); }
+  .sec-row .bar > i { background: #0cc04b; }
+  .gaps { margin: 10px 0 0; padding-left: 1.2em; color: #1ac8efac}
+  .gaps li { margin: 4px 0;}
+  .fb { border-radius: 12px; border: 1px solid var(--line); padding: 16px; margin-top: 14px; background: #000000; color: var(--line)}
+  .fb h3 { font-size: 1.02rem; margin-bottom: 8px; color: var(--primary) }
+  .tag { display: inline-block; font-size: .82rem; padding: 2px 10px; border-radius: 999px; background: #073b76; color: #f7f7f7; margin-bottom: 8px; }
+  .tag.ok { background: var(--ok-soft); color: #fff; }
   .ans-row { display: grid; gap: 6px; margin: 10px 0; font-size: .96rem; }
   .ans-row div { padding: 8px 12px; border-radius: 8px; }
-  .ans-row .yours { background: var(--bad-soft); }
-  .ans-row .right { background: var(--ok-soft); }
+  .ans-row .yours { background: var(--bad-soft);color: #fff; }
+  .ans-row .right { background: var(--ok-soft); color: #fff }
   .exp { margin-top: 8px; font-size: .96rem; }
   .allgood { background: var(--ok-soft); color: var(--ok); border-radius: 12px; padding: 14px 16px; margin-top: 14px; font-weight: 600; }
   .retry { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 28px; }
@@ -158,7 +158,7 @@
       </svg>
     </div>
     <h1 id="coverTitle">Generador de exámenes de Movimiento Ondulatorio</h1>
-    <p>Cada examen se arma al azar con preguntas que piden razonar, despejar y aplicar. Al reintentar salen preguntas distintas.</p>
+    <p>Refuerza tus conocimientos</p>
     <div class="facts" id="facts"></div>
 
     <fieldset class="modes">
@@ -1232,11 +1232,6 @@ var BANK = [
     quiz.classList.add("hidden");
     results.classList.add("hidden");
     cover.classList.remove("hidden");
-    $("facts").innerHTML =
-      "<span>" + BANK.length + " preguntas en el banco</span>" +
-      "<span>" + EXAM_SIZE + " por examen</span>" +
-      "<span>" + SECTIONS.length + " secciones</span>" +
-      "<span>Puntuación de 1 a 5</span>";
     var saved = sget(K_EXAM);
     var canResume = validExam(saved);
     $("resumeBtn").classList.toggle("hidden", !canResume);
