@@ -4,10 +4,27 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Generador de exámenes · Movimiento Ondulatorio</title>
-<link rel="stylesheet" href="estilo.css">
+<meta name="color-scheme" content="light dark">
+<script>
+/* Aplica el tema guardado (o el del sistema) antes de pintar, para evitar parpadeos */
+(function () {
+  var t = null;
+  try { t = window.localStorage.getItem("ondas_theme_v1"); } catch (e) {}
+  if (t !== "light" && t !== "dark") {
+    t = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+  }
+  document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+<link rel="stylesheet" href="estilo.css?v=2">
 </head>
 <body>
 <div class="wrap">
+
+  <!-- CAMBIO DE TEMA -->
+  <div class="topbar">
+    <button class="btn ghost small" id="themeBtn" type="button" aria-pressed="false">Modo oscuro</button>
+  </div>
 
   <!-- PORTADA -->
   <section id="cover" class="cover" aria-labelledby="coverTitle">
@@ -89,6 +106,6 @@
                absoluto mínimo permitido (útil si ans es cercano a 0).
                Acepta coma o punto decimal y notación 2.5e-4.
      ===================================================================== -->
-<script src="motor.js"></script>
+<script src="motor.js?v=2"></script>
 </body>
 </html>

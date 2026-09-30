@@ -1260,5 +1260,36 @@ var BANK = [
     });
   });
 
+  /* ============================ TEMA CLARO / OSCURO ============================
+     El tema se guarda en localStorage ("ondas_theme_v1"). La clase real vive en
+     <html data-theme="light|dark">; los colores están en estilo.css. */
+  var K_THEME = "ondas_theme_v1";
+  function applyTheme(t) {
+    document.documentElement.setAttribute("data-theme", t);
+    var dark = t === "dark";
+    var b = $("themeBtn");
+    if (b) {
+      b.textContent = dark ? "Modo claro" : "Modo oscuro";
+      b.setAttribute("aria-pressed", dark ? "true" : "false");
+      b.setAttribute("aria-label", dark ? "Cambiar a modo claro" : "Cambiar a modo oscuro");
+    }
+  }
+  function toggleTheme() {
+    var t = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    applyTheme(t);
+    try { window.localStorage.setItem(K_THEME, t); } catch (e) { /* sin acceso */ }
+  }
+  /* Si el botón no está en index.html (por ejemplo, un index.html antiguo), se crea aquí */
+  if (!$("themeBtn")) {
+    var bar = document.createElement("div");
+    bar.className = "topbar";
+    bar.style.cssText = "display:flex;justify-content:flex-end";
+    bar.innerHTML = "<button class='btn ghost small' id='themeBtn' type='button' aria-pressed='false'>Modo oscuro</button>";
+    var wrap = document.querySelector(".wrap");
+    wrap.insertBefore(bar, wrap.firstChild);
+  }
+  $("themeBtn").addEventListener("click", toggleTheme);
+  applyTheme(document.documentElement.getAttribute("data-theme") || "light");
+
   showCover();
 })();
